@@ -2,61 +2,62 @@
 #include "LPC17xx.h"
 #endif
 
-void initGPIO(void);
-void initEINT0(void);
+#include <stdio.h>
 
-int main(void){
+static int buttonState;
 
-    initGPIO();
-    initEINT0();
+void EINT3_IRQHandler(void)
+{
+    if ((LPC_GPIOINT->IO2IntStatR & (1U << 0)) != 0U ||
+        (LPC_GPIOINT->IO2IntStatF & (1U << 0)) != 0U) {
+        buttonState = ((LPC_GPIO2->FIOPIN & (1U << 0)) != 0U);
 
-    while(1){
-        // loop vacío
+        if (buttonState) {
+            LPC_GPIO0->FIOCLR = (1U << 22);
+            printf("P2.0 = 1 -> PRESIONADO\r\n");
+        } else {
+            LPC_GPIO0->FIOSET = (1U << 22);
+            printf("P2.0 = 0 -> SUELTO\r\n");
+        }
+
+        LPC_GPIOINT->IO2IntClr = (1U << 0);
     }
 }
 
-// ---------------- GPIO ----------------
-void initGPIO(void){
+int main(void)
+{
+    // P0.22 como GPIO de salida para el LED interno (activo en bajo)
+    LPC_PINCON->PINSEL1 &= ~(3U << 12);
+    LPC_GPIO0->FIODIR |= (1U << 22);
+    LPC_GPIO0->FIOSET = (1U << 22);
 
-    LPC_GPIO0->FIODIR |= (1 << 22);   // LED como salida
-    LPC_GPIO0->FIOCLR |= (1 << 22);   // LED apagado
-}
+    // P2.0 como GPIO de entrada con pull-down
+    LPC_PINCON->PINSEL4 &= ~(3U << 0);
+    LPC_PINCON->PINMODE4 &= ~(3U << 0);
+    LPC_PINCON->PINMODE4 |= (3U << 0);
+    LPC_GPIO2->FIODIR &= ~(1U << 0);
 
-// ---------------- EINT0 ----------------
-void initEINT0(void){
+    // Limpia pendientes previas y habilita flancos ascendente y descendente
+    LPC_GPIOINT->IO2IntClr = (1U << 0);
+    LPC_GPIOINT->IO2IntEnR |= (1U << 0);
+    LPC_GPIOINT->IO2IntEnF |= (1U << 0);
 
-    // 1. Configurar P2.10 como EINT0
-    LPC_PINCON->PINSEL4 &= ~(3 << 20); // limpiar bits
-    LPC_PINCON->PINSEL4 |=  (1 << 20); // función EINT0
+    NVIC_EnableIRQ(EINT3_IRQn);
 
-    // 2. Modo por flanco
-    LPC_SC->EXTMODE |= (1 << 0);
+    printf("Debug por interrupcion en P2.0\r\n");
+    printf("P2.0 con pull-down interno\r\n");
 
-    // 3. Flanco de bajada
-    LPC_SC->EXTPOLAR &= ~(1 << 0);
+    buttonState = ((LPC_GPIO2->FIOPIN & (1U << 0)) != 0U);
 
-    // 4. Limpiar interrupción previa
-    LPC_SC->EXTINT = (1 << 0);
+    if (buttonState) {
+        LPC_GPIO0->FIOCLR = (1U << 22);
+        printf("Estado inicial: PRESIONADO\r\n");
+    } else {
+        LPC_GPIO0->FIOSET = (1U << 22);
+        printf("Estado inicial: SUELTO\r\n");
+    }
 
-    // 5. Habilitar en NVIC (puntero directo)
-    NVIC->ISER[0] |= (1 << 18);
-
-    // 6. (Opcional) prioridad
-    NVIC->IP[18] = (5 << 3);  // prioridad media (solo 5 bits útiles)
-
-    // 7. Habilitar interrupciones globales
-    __asm volatile ("cpsie i");
-}
-
-// ---------------- ISR ----------------
-void EINT0_IRQHandler(void){
-
-    // Verificar flag
-    if (LPC_SC->EXTINT & (1 << 0)){
-
-        LPC_GPIO0->FIOPIN ^= (1 << 22); // toggle LED
-
-        // Limpiar flag (MUY IMPORTANTE)
-        LPC_SC->EXTINT = (1 << 0);
+    while (1) {
+        __WFI();
     }
 }

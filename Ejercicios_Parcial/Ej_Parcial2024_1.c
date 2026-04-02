@@ -114,6 +114,11 @@ void SysTick_Handler(){
 	cont++;
 }
 
+void EINT0_IRQHandler(void){
+	sensor();
+}
+
+
 void config_systick(){
 	//configuramos systick
 	SysTick->LOAD = 699999;

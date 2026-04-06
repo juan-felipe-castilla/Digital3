@@ -177,9 +177,11 @@ int main(void)
                     {
 
                         secuencia[longitud_secuencia] = rand() % CANT_LEDS; // le metemos el random
-
-                        longitud_secuencia++;// agrandamos secuencia
-
+                        if(longitud_secuencia <= MAX_SECUENCIA){
+                        	longitud_secuencia++;// agrandamos secuencia
+                        }else{
+                        	estado_actual = ESTADO_VICTORIA;
+                        }
                         indice_mostrar = 0;
                         subestado_mostrar = SUB_ENCENDER_LED;
 
@@ -298,7 +300,7 @@ int main(void)
                             }
                             else
                             {
-
+                            	//indicar error?? --> estimamos que prendemos el led que fallo
                                 estado_actual = ESTADO_GAME_OVER;//fail
                             }
 
@@ -329,7 +331,7 @@ int main(void)
                 }
 
       case ESTADO_GAME_OVER:
-        {
+      {
             printf("\n\n");
             printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⡀⠀\n");
             printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣤⠀⠀⠀⢀⣴⣿⡶⠀⣾⣿⣿⡿⠟⠛⠁\n");
@@ -476,18 +478,12 @@ void EINT3_IRQHandler(void)
 
     LPC_GPIOINT->IO0IntClr = estado_p0;
 
-    if (estado_actual == ESTADO_IDLE)
-    {
-
+    if(estado_actual == ESTADO_IDLE){
         evento_start = 1; // apretamos una vez para prender
-
-
         return;
     }
 
-
-    if (habilitar_lectura_usuario && (evento_boton == 0)) // chequeamos legalidad de la lectura
-    {
+    if(habilitar_lectura_usuario && (evento_boton == 0)){ // chequeamos legalidad de la lectura
 
         if (estado_p0 & BOTON_0)
         {
@@ -542,8 +538,7 @@ void config_botones(void)
    MANEJO DE LEDS
    ========================= */
 
-void leds_apagar_todos(void)
-{
+void leds_apagar_todos(void){
     LPC_GPIO2->FIOCLR = (
         (1 << 0) |
         (1 << 1) |
@@ -552,8 +547,7 @@ void leds_apagar_todos(void)
     );
 }
 
-void led_mostrar(uint8_t indice)
-{
+void led_mostrar(uint8_t indice){
     leds_apagar_todos();
 
     if (indice < CANT_LEDS)

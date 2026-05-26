@@ -1,0 +1,10 @@
+../src/digital-osc.c:54:6:capture_adc_dma	8	static
+../src/digital-osc.c:117:6:ADC0_Init	8	static
+../src/digital-osc.c:133:6:generate_triangle_in_memory	16	static
+../src/digital-osc.c:150:6:UART0_Init	16	static
+../src/digital-osc.c:172:6:send_signal_ascii	24	static
+../src/digital-osc.c:184:6:send_signal_binary	8	static
+../src/digital-osc.c:191:9:obtener_mediana_5	32	static
+../src/digital-osc.c:210:6:filtrar_ruido_adc	32	static
+../src/digital-osc.c:233:6:send_adc_data_ascii	80	static
+../src/digital-osc.c:250:5:main	16	static

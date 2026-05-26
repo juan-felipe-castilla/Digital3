@@ -50,7 +50,7 @@ Para garantizar la máxima frecuencia de trabajo sin saturar el procesador, el c
 
 ---
 
-### 💻 4. Visualización de Datos (Interfaz en PC)
+### 💻 4. Visualización de Datos y UART (Interfaz en PC)
 - Para ofrecer claridad de lectura, los datos recolectados se envían vía **puerto serie** hacia una PC.
 - **Script Python 🐍:**  
     - Recibe y grafica los datos en tiempo real.
@@ -59,13 +59,3 @@ Para garantizar la máxima frecuencia de trabajo sin saturar el procesador, el c
 ---
 
 ## 🚀 Proyecto desarrollado para la cátedra de Electrónica Digital 3
-
-```
-Repositorio: [juan-felipe-castilla/Digital3](https://github.com/juan-felipe-castilla/Digital3)  
-Lenguajes principales: ![C](https://img.shields.io/badge/C-96.1%25-blue?logo=c) ![Python](https://img.shields.io/badge/Python-3.9%25-green?logo=python)
-```
-
----
-
-⁉️ **¿Preguntas o sugerencias?**  
-¡No dudes en abrir un issue o contactar a los autores!

@@ -1,43 +1,3 @@
-/*
-IDEA DE UN PROMPT PARA IMPLEMENTAR DAC
-
-
-
-Nos encontramos haciendo un trabajo final con la LPC1769. La idea es hacer un osciloscopio digital.
-
-
-
-Si no me equivoco ya te he comentado un poco los requerimientos minimos, asi que usa eso como base.
-
-
-
-Debo implementar un codigo de DAC para lo siguiente:
-
-
-
-Simula la funcion de calibracion de osciloscopio. La idea es conectar la salida del DAC a la entrada del ADC para generar 2 tipos de ondas: Una cuadrada y otra triangular.
-
-
-
-Necesito que me digas que limitaciones van a tener estas señales. Yo quiero la maxima resolucion posible y la maxima frrcuencia posible, que supongo que debe ser un comun entre el DAC y el ADC.
-
-
-
-Ambos tipos de señal seran transmitidos por DMA.
-
-
-
-Tambien quiero dejar puntos de “facil accesibilidad”. Con esto me refiero a lo siguiente:
-
-
-
-Vamos a implementar interrupciones externas para ir cambiando los modos del osciloscopio. Una de dichas interrupciones cambiara al modo de DAC-DMA (modo ondas generadas/calibracion). Quiero que me des la forma mas optima de implementar esto (si en el handler inhabilito el DAC y viceversa, o como).
-
-
-
-Tambien, una vez en modo DAC quiero que se habilite una interrupcion aparte que cambie entre la señal cuadrada o la triangular. 
- */
-
 #ifdef __USE_CMSIS
 #include "LPC17xx.h"
 #endif
@@ -45,6 +5,7 @@ Tambien, una vez en modo DAC quiero que se habilite una interrupcion aparte que 
 #include <cr_section_macros.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "../Drivers/inc/debug_frmwrk.h"
 #include "../Drivers/inc/lpc17xx_adc.h"
@@ -75,5 +36,58 @@ Tambien, una vez en modo DAC quiero que se habilite una interrupcion aparte que 
 #include "../Drivers/inc/lpc_types.h"
 
 #include "../headers/o-dac.h"
+#include "../headers/variables.h"
 
 
+void conf_DAC(){
+	static DAC_CONVERTER_CFG_T dacCfg;
+	DAC_Init();   			//Inicializamos el DAC y su pin
+	DAC_SetBias(DAC_350uA); //Se banca hasta 400 KHz
+	dacCfg.dmaCounter = ENABLE;
+	dacCfg.dmaRequest = ENABLE;
+	dacCfg.doubleBuffer = DISABLE;
+	DAC_ConfigDAConverterControl(&dacCfg);
+	DAC_SetDMATimeOut(49); //El periodo de las senales genradas es de 512 muestras y su frecuencia esperada es de 1Khz,por lo tanto
+						   //1ms/512 = 1954nS, luego 1954nS/40nS = 49
+	DAC_UpdateValue(0);    //Limpiamos lo que este en el DAC
+}
+
+void generate_square_in_memory(void) {
+    uint32_t i;
+
+    // Mitad del ciclo en ALTO
+    for (i = 0; i < SAMPLES_PER_CYCLE / 2; i++) {
+        quad_buffer[i] = (uint16_t)DAC_MAX_VALUE;
+    }
+
+    // Mitad del ciclo en BAJO
+    for (i = SAMPLES_PER_CYCLE / 2; i < SAMPLES_PER_CYCLE; i++) {
+        quad_buffer[i] = (uint16_t)DAC_MIN_VALUE;
+    }
+}
+
+void generate_triangle_in_memory(void) {
+    uint32_t i;
+    for (i = 0; i < 256; i++) {
+        triangle_buffer[i] = (uint8_t)i;
+    }
+    for (i = 256; i < SAMPLES_PER_CYCLE; i++) {
+        triangle_buffer[i] = (uint8_t)(510 - i);
+    }
+}
+
+void generate_sine_in_memory(void) {
+    uint32_t i;
+
+    // El centro de la señal (offset) y la amplitud máxima para no saturar
+    float amplitude = DAC_MAX_VALUE / 2.0f;
+    float offset = DAC_MAX_VALUE / 2.0f;
+
+    for (i = 0; i < SAMPLES_PER_CYCLE; i++) {
+        // Calcular el ángulo en radianes para cada muestra (0 a 2*PI)
+        float angle = (2.0f * M_PI * i) / SAMPLES_PER_CYCLE;
+
+        // Generar el valor de la seno, aplicar amplitud, offset y castear a entero
+        sine_buffer[i] = (uint16_t)(amplitude * sinf(angle) + offset);
+    }
+}

@@ -13,3 +13,9 @@ __BSS(RAM2) uint32_t adc_buffer_B[ADC_BUFFER_SIZE];
 // Inicialización de las banderas de control
 volatile uint8_t active_dma_buffer = 0;
 volatile uint8_t buffer_ready = 0;
+
+uint16_t sine_buffer[SAMPLES_PER_CYCLE];
+uint16_t quad_buffer[SAMPLES_PER_CYCLE];
+
+uint8_t contDAC = 0;
+uint8_t contDACen = 0;

@@ -4,6 +4,7 @@
 
 #include <cr_section_macros.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "../Drivers/inc/debug_frmwrk.h"
 #include "../Drivers/inc/lpc17xx_adc.h"
@@ -36,14 +37,20 @@
 #include "headers/o-adc.h"
 #include "headers/o-dma.h"
 #include "headers/o-uart.h"
+#include "headers/o-dac.h"
+#include "headers/o-exti.h"
 #include "headers/variables.h"
+
 
 
 int main(void) {
     SystemInit();
 
+    conf_EXTI();
+    conf_DAC();
     UART0_Init();
     ADC0_Init();
+    generate_triangle_in_memory();
 
     // Inicializa el controlador GPDMA y habilita su interrupción en el micro
     GPDMA_Init();

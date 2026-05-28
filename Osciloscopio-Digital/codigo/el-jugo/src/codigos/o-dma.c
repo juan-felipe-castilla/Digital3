@@ -12,6 +12,7 @@
 #include <cr_section_macros.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "../Drivers/inc/debug_frmwrk.h"
 #include "../Drivers/inc/lpc17xx_adc.h"
@@ -116,4 +117,114 @@ void DMA_IRQHandler(void) {
         // Vuelve a arrancar el DMA al nuevo buffer
         capture_adc_dma_start();
     }
+}
+
+void dac_dma(void) {
+    // Esto asegura que campos críticos (como el puntero de DMALLI)
+    // no arranquen con basura de la RAM y crasheen el micro.
+    GPDMA_Channel_CFG_T DACCfgT = {0};
+    GPDMA_Channel_CFG_T DACCfgS = {0};
+    GPDMA_Channel_CFG_T DACCfgQ = {0};
+
+    GPDMA_LLI_T sin_signal;
+    GPDMA_LLI_T quad_signal;
+    GPDMA_LLI_T triangle_signal;
+
+    // Configura los parámetros del canal DMA
+    DACCfgT.channelNum = GPDMA_CH_1;
+    DACCfgT.transferSize = 1024;
+    DACCfgT.type = GPDMA_M2P;
+    DACCfgT.srcMemAddr = (uint32_t)triangle_buffer;
+    DACCfgT.srcConn = 0;
+    DACCfgT.dstMemAddr = (uint32_t)&(LPC_DAC->DACR);
+    DACCfgT.dstConn = GPDMA_DAC;
+    DACCfgT.linkedList = (uint32_t)&triangle_signal;
+
+    DACCfgT.src.width = GPDMA_HALFWORD;
+    DACCfgT.src.burst = GPDMA_BSIZE_1;
+    DACCfgT.src.increment = ENABLE;
+
+    DACCfgT.dst.width = GPDMA_HALFWORD;
+    DACCfgT.dst.burst = GPDMA_BSIZE_1;
+    DACCfgT.dst.increment = DISABLE;
+
+    DACCfgT.intTC = DISABLE;
+    DACCfgT.intErr = ENABLE;
+
+    // Aplica
+    GPDMA_SetupChannel(&DACCfgT);
+    (GPDMA_CH_1);
+
+    // Configura los parámetros del canal DMA
+    DACCfgS.channelNum = GPDMA_CH_2;
+    DACCfgS.transferSize = 1024;
+    DACCfgS.type = GPDMA_M2P;
+    DACCfgS.srcMemAddr = (uint32_t)sine_buffer;
+    DACCfgS.srcConn = 0;
+    DACCfgS.dstMemAddr = (uint32_t)&(LPC_DAC->DACR);
+    DACCfgS.dstConn = GPDMA_DAC;
+    DACCfgT.linkedList = (uint32_t)&sin_signal;
+
+    DACCfgS.src.width = GPDMA_HALFWORD;
+    DACCfgS.src.burst = GPDMA_BSIZE_1;
+    DACCfgS.src.increment = ENABLE;
+
+    DACCfgS.dst.width = GPDMA_HALFWORD;
+    DACCfgS.dst.burst = GPDMA_BSIZE_1;
+    DACCfgS.dst.increment = DISABLE;
+
+    DACCfgS.intTC = DISABLE;
+    DACCfgS.intErr = ENABLE;
+
+    // Aplica
+    GPDMA_SetupChannel(&DACCfgS);
+
+    // Configura los parámetros del canal DMA
+    DACCfgQ.channelNum = GPDMA_CH_3;
+    DACCfgQ.transferSize = 1024;
+    DACCfgQ.type = GPDMA_M2P;
+    DACCfgQ.srcMemAddr = (uint32_t)quad_buffer;
+    DACCfgQ.srcConn = 0;
+    DACCfgQ.dstMemAddr = (uint32_t)&(LPC_DAC->DACR);
+    DACCfgQ.dstConn = GPDMA_DAC;
+    DACCfgT.linkedList = (uint32_t)&quad_signal;
+
+    DACCfgQ.src.width = GPDMA_HALFWORD;
+    DACCfgQ.src.burst = GPDMA_BSIZE_1;
+    DACCfgQ.src.increment = ENABLE;
+
+    DACCfgQ.dst.width = GPDMA_HALFWORD;
+    DACCfgQ.dst.burst = GPDMA_BSIZE_1;
+    DACCfgQ.dst.increment = DISABLE;
+
+    DACCfgQ.intTC = DISABLE;
+    DACCfgQ.intErr = ENABLE;
+
+    // Aplica
+    GPDMA_SetupChannel(&DACCfgQ);
+
+    sin_signal.srcAddr = (uint32_t)sine_buffer;
+	sin_signal.dstAddr = (uint32_t)&(LPC_DAC->DACR);
+	sin_signal.nextLLI = (uint32_t)&sin_signal;
+	sin_signal.control = (1024 | (1 << 18) | (1 << 21) | (1 << 26));
+
+    quad_signal.srcAddr = (uint32_t)quad_buffer;
+	quad_signal.dstAddr = (uint32_t)&(LPC_DAC->DACR);
+	quad_signal.nextLLI = (uint32_t)&quad_signal;
+	quad_signal.control = (1024 | (1 << 18) | (1 << 21) | (1 << 26));
+
+	triangle_signal.srcAddr = (uint32_t)triangle_buffer;
+	triangle_signal.dstAddr = (uint32_t)&(LPC_DAC->DACR);
+	triangle_signal.nextLLI = (uint32_t)&triangle_signal;
+	triangle_signal.control = (1024 | (1 << 18) | (1 << 21) | (1 << 26));
+
+	GPDMA_ChannelStart(GPDMA_CH_1);
+	GPDMA_ChannelStart(GPDMA_CH_2);
+	GPDMA_ChannelStart(GPDMA_CH_3);
+
+
+	GPDMA_ChannelPause(GPDMA_CH_1);
+	GPDMA_ChannelPause(GPDMA_CH_2);
+	GPDMA_ChannelPause(GPDMA_CH_3);
+
 }

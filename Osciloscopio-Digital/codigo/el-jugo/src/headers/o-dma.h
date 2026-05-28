@@ -10,5 +10,6 @@
 
 void capture_adc_dma_start(void);
 void DMA_IRQHandler(void);
+void dac_dma(void);
 
 #endif /* O_DMA_H_ */

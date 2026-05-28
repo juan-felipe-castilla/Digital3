@@ -42,33 +42,11 @@
 #include "../Drivers/inc/lpc_types.h"
 
 #include "../headers/o-adc.h"
+#include "../headers/variables.h"
 
-// Definiciones para la señal
-#define ADC_BUFFER_SIZE 4095
-
-// Nuevo tamaño: 2000 / 5 = 400 muestras filtradas
-#define FILTERED_BUFFER_SIZE (ADC_BUFFER_SIZE / 5)
-
-// Buffer global para la señal ya filtrada
-uint8_t filtered_buffer[FILTERED_BUFFER_SIZE];
-
-// Búfer para almacenar las muestras capturadas del ADC
-// Se usa uint32_t para capturar el registro ADGDR completo (incluye datos y flags)
-uint32_t adc_buffer[ADC_BUFFER_SIZE];
-
-/**
- * @brief Inicializa el ADC a una frecuencia de muestreo de 200kHz.
- * Configura el canal AD0.0 en el pin P0.23.
- */
 void ADC0_Init(void) {
-    // Inicializa el periférico ADC con una tasa de muestreo de 200,000 Hz (200kHz)
-    // Nota: 200kHz es el límite máximo para el LPC1769.
     ADC_Init(200000);
-
-    // Configura el pin P0.23 como entrada del canal AD0.0
     ADC_PinConfig(ADC_CHANNEL_0);
-
-    // Habilita el canal 0 para las conversiones
     ADC_ChannelEnable(ADC_CHANNEL_0);
 }
 
@@ -77,7 +55,6 @@ void ADC0_Init(void) {
  */
 uint8_t obtener_mediana_5(uint8_t *ventana) {
     uint8_t aux;
-    // Bubble sort rápido para 5 elementos
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4 - i; j++) {
             if (ventana[j] > ventana[j + 1]) {
@@ -94,21 +71,17 @@ uint8_t obtener_mediana_5(uint8_t *ventana) {
  * @brief Recorre el buffer del ADC en saltos de 5, extrae los valores,
  * calcula la mediana de cada bloque y la guarda en el buffer filtrado.
  */
-void filtrar_ruido_adc(void) {
+void filtrar_ruido_adc(uint32_t *buffer_crudo) {
     uint8_t ventana[5];
     uint16_t adc_val;
-    uint32_t f_idx = 0; // Índice para el nuevo buffer
+    uint32_t f_idx = 0;
 
-    // Recorremos los 2000 datos en bloques de a 5
     for (uint32_t i = 0; i < ADC_BUFFER_SIZE; i += 5) {
-
-        // Extraemos 5 muestras consecutivas
+        // Se cambió el j < 4 por j < 5 para tomar las 5 muestras correctas
         for (int j = 0; j < 5; j++) {
-            adc_val = ADC_GDR_RESULT(adc_buffer[i + j]);
+            adc_val = ADC_GDR_RESULT(buffer_crudo[i + j]);
             ventana[j] = (uint8_t)(adc_val >> 4);
         }
-
-        // Sacamos la mediana de esas 5 y la guardamos en el nuevo buffer
         filtered_buffer[f_idx] = obtener_mediana_5(ventana);
         f_idx++;
     }
@@ -117,18 +90,3 @@ void filtrar_ruido_adc(void) {
 /**
  * @brief Filtra los datos capturados y los envía por UART.
  */
-void send_adc_data_ascii(void) {
-    char msg[16];
-
-    char header[] = "--- Señal Filtrada (400 muestras) ---\r\n";
-    UART_Send(UART0, (uint8_t *)header, strlen(header), BLOCKING);
-
-    // 1. Aplicamos el tratamiento de señal para cargar el nuevo buffer
-    filtrar_ruido_adc();
-
-    // 2. Transmitimos el buffer ya limpio
-    for (uint32_t i = 0; i < FILTERED_BUFFER_SIZE; i++) {
-        sprintf(msg, "%u\r\n", filtered_buffer[i]);
-        UART_Send(UART0, (uint8_t *)msg, strlen(msg), BLOCKING);
-    }
-}

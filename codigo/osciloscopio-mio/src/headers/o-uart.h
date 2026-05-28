@@ -9,8 +9,6 @@
 #define O_UART_H_
 
 void UART0_Init(void);
-void generate_triangle_in_memory(void);
-void send_signal_ascii(void);
-void send_signal_binary(void);
+void send_adc_data_ascii(void);
 
 #endif /* O_UART_H_ */

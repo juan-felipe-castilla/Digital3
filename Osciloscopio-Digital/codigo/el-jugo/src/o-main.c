@@ -39,8 +39,8 @@
 #include "headers/o-uart.h"
 #include "headers/o-dac.h"
 #include "headers/o-exti.h"
+#include "headers/o-tim0CAP.h"
 #include "headers/variables.h"
-
 
 
 int main(void) {
@@ -50,7 +50,12 @@ int main(void) {
     conf_DAC();
     UART0_Init();
     ADC0_Init();
+
     generate_triangle_in_memory();
+    generate_square_in_memory();
+    generate_sine_in_memory();
+
+    dac_dma();
 
     // Inicializa el controlador GPDMA y habilita su interrupción en el micro
     GPDMA_Init();
@@ -62,6 +67,9 @@ int main(void) {
 
     // Dispara la primera captura del DMA
     capture_adc_dma_start();
+
+    confTIM0();
+    confCAP();
 
     while(1) {
             uint8_t buffer_a_procesar_local = 0;
@@ -86,6 +94,24 @@ int main(void) {
                 // 2. Transmitimos (Este paso es súper lento, pero el DMA sigue trabajando)
                 send_adc_data_ascii();
             }
+
+           //COSA PARA MOSTRAR LA FRECUENCIA 1 SOLA VEZ
+            if (nueva_medicion_lista == 1) {
+
+                        // 1. Calculamos la frecuencia
+                        if (periodo_ticks > 0) {
+                            frecuencia_hz = 100000 / periodo_ticks;
+                        } else {
+                            frecuencia_hz = 0;
+                        }
+
+                        // 2. Imprimimos en la terminal (printf usa la UART por defecto si el retarget está configurado)
+                        printf("La frecuencia es: %lu Hz\n\r", frecuencia_hz);
+
+                        // 3. Bajamos la bandera para que NO se vuelva a imprimir
+                        // hasta que el usuario presione EINT2 otra vez
+                        nueva_medicion_lista = 0;
+             }
         }
 
         // Acá podrías poner a dormir el micro (WFI) para ahorrar energía

@@ -19,3 +19,13 @@ uint16_t quad_buffer[SAMPLES_PER_CYCLE];
 
 uint8_t contDAC = 0;
 uint8_t contDACen = 0;
+
+volatile uint8_t sistema_dac_activo = 0;
+volatile uint8_t canal_dma_actual = 1;  // 1: Triángulo, 2: Seno, 3: Cuadrada
+
+volatile uint8_t estado_captura = 0;
+volatile uint32_t t1 = 0;
+volatile uint32_t t2 = 0;
+volatile uint32_t periodo_ticks = 0;
+volatile uint8_t nueva_medicion_lista = 0; // Bandera de aviso
+uint32_t frecuencia_hz = 0;

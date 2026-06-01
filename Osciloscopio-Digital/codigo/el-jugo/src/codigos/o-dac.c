@@ -39,10 +39,10 @@
 #include "../headers/variables.h"
 
 
-void conf_DAC(){
+void conf_DAC(){ //OK
 	static DAC_CONVERTER_CFG_T dacCfg;
 	DAC_Init();   			//Inicializamos el DAC y su pin
-	DAC_SetBias(DAC_350uA); //Se banca hasta 400 KHz
+	DAC_SetBias(DAC_700uA); //Se banca hasta 400 KHz
 	dacCfg.dmaCounter = ENABLE;
 	dacCfg.dmaRequest = ENABLE;
 	dacCfg.doubleBuffer = DISABLE;
@@ -52,31 +52,34 @@ void conf_DAC(){
 	DAC_UpdateValue(0);    //Limpiamos lo que este en el DAC
 }
 
-void generate_square_in_memory(void) {
+void generate_square_in_memory(void) {//PUEDE ESTAR MAL
     uint32_t i;
 
-    // Mitad del ciclo en ALTO
+    // Mitad del ciclo en ALTO. Se corre el valor 6 posiciones.
     for (i = 0; i < SAMPLES_PER_CYCLE / 2; i++) {
-        quad_buffer[i] = (uint16_t)DAC_MAX_VALUE;
+        quad_buffer[i] = (uint16_t)(DAC_MAX_VALUE << 6);
     }
 
-    // Mitad del ciclo en BAJO
+    // Mitad del ciclo en BAJO. Se corre el valor 6 posiciones.
     for (i = SAMPLES_PER_CYCLE / 2; i < SAMPLES_PER_CYCLE; i++) {
-        quad_buffer[i] = (uint16_t)DAC_MIN_VALUE;
+        quad_buffer[i] = (uint16_t)(DAC_MIN_VALUE << 6);
     }
 }
 
-void generate_triangle_in_memory(void) {
+void generate_triangle_in_memory(void) {//PUEDE ESTAR MAL
     uint32_t i;
+
+    // Se cambia el cast de uint8_t a uint16_t para que el corrimiento de 6 bits
+    // no desborde la variable y se pierda la información.
     for (i = 0; i < 256; i++) {
-        triangle_buffer[i] = (uint8_t)i;
+        triangle_buffer[i] = ((uint16_t)i) << 6;
     }
     for (i = 256; i < SAMPLES_PER_CYCLE; i++) {
-        triangle_buffer[i] = (uint8_t)(510 - i);
+        triangle_buffer[i] = ((uint16_t)(510 - i)) << 6;
     }
 }
 
-void generate_sine_in_memory(void) {
+void generate_sine_in_memory(void) { //PUEDE ESTAR MAL
     uint32_t i;
 
     // El centro de la señal (offset) y la amplitud máxima para no saturar
@@ -87,7 +90,10 @@ void generate_sine_in_memory(void) {
         // Calcular el ángulo en radianes para cada muestra (0 a 2*PI)
         float angle = (2.0f * M_PI * i) / SAMPLES_PER_CYCLE;
 
-        // Generar el valor de la seno, aplicar amplitud, offset y castear a entero
-        sine_buffer[i] = (uint16_t)(amplitude * sinf(angle) + offset);
+        // Generar el valor crudo de la seno, aplicar amplitud y offset
+        uint16_t raw_value = (uint16_t)(amplitude * sinf(angle) + offset);
+
+        // Correr 6 posiciones y guardar en el buffer
+        sine_buffer[i] = raw_value << 6;
     }
 }

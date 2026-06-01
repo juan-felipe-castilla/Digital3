@@ -38,7 +38,16 @@ extern volatile uint8_t buffer_ready;
 extern uint16_t sine_buffer[SAMPLES_PER_CYCLE];
 extern uint16_t quad_buffer[SAMPLES_PER_CYCLE];
 
-extern uint8_t contDACen;
-extern uint8_t contDAC;
+//VARIABLES PAAR DAC
+extern volatile uint8_t sistema_dac_activo;
+extern volatile uint8_t canal_dma_actual;  // 1: Triángulo, 2: Seno, 3: Cuadrada
+
+//VARIABLES TMR0CAP
+extern volatile uint8_t estado_captura;
+extern volatile uint32_t t1;
+extern volatile uint32_t t2;
+extern volatile uint32_t periodo_ticks;
+extern volatile uint8_t nueva_medicion_lista;
+extern uint32_t frecuencia_hz;
 #endif // VARIABLES_H
 

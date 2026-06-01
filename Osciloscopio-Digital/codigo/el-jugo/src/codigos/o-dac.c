@@ -47,53 +47,25 @@ void conf_DAC(){ //OK
 	dacCfg.dmaRequest = ENABLE;
 	dacCfg.doubleBuffer = DISABLE;
 	DAC_ConfigDAConverterControl(&dacCfg);
-	DAC_SetDMATimeOut(49); //El periodo de las senales genradas es de 512 muestras y su frecuencia esperada es de 1Khz,por lo tanto
+	DAC_SetDMATimeOut(300); //El periodo de las senales genradas es de 512 muestras y su frecuencia esperada es de 1Khz,por lo tanto
 						   //1ms/512 = 1954nS, luego 1954nS/40nS = 49
 	DAC_UpdateValue(0);    //Limpiamos lo que este en el DAC
 }
 
-void generate_square_in_memory(void) {//PUEDE ESTAR MAL
+void generate_triangle_in_memory(void) {
     uint32_t i;
+    uint16_t valor_amplitud;
 
-    // Mitad del ciclo en ALTO. Se corre el valor 6 posiciones.
-    for (i = 0; i < SAMPLES_PER_CYCLE / 2; i++) {
-        quad_buffer[i] = (uint16_t)(DAC_MAX_VALUE << 6);
+    // Rampa de subida: 255 muestras (índices del 0 al 254)
+    for(i = 0; i < 255; i++){
+        valor_amplitud = i * 4; // Escala de 0 hasta 1016
+        triangle_buffer[i] = (valor_amplitud << 6); // Corrimiento vital para el DACR
     }
 
-    // Mitad del ciclo en BAJO. Se corre el valor 6 posiciones.
-    for (i = SAMPLES_PER_CYCLE / 2; i < SAMPLES_PER_CYCLE; i++) {
-        quad_buffer[i] = (uint16_t)(DAC_MIN_VALUE << 6);
+    // Rampa de bajada: 255 muestras (índices del 255 al 509)
+    for(i = 255; i < 510; i++){
+        valor_amplitud = (510 - i) * 4; // Escala de 1020 bajando hasta 4
+        triangle_buffer[i] = (valor_amplitud << 6);
     }
 }
 
-void generate_triangle_in_memory(void) {//PUEDE ESTAR MAL
-    uint32_t i;
-
-    // Se cambia el cast de uint8_t a uint16_t para que el corrimiento de 6 bits
-    // no desborde la variable y se pierda la información.
-    for (i = 0; i < 256; i++) {
-        triangle_buffer[i] = ((uint16_t)i) << 6;
-    }
-    for (i = 256; i < SAMPLES_PER_CYCLE; i++) {
-        triangle_buffer[i] = ((uint16_t)(510 - i)) << 6;
-    }
-}
-
-void generate_sine_in_memory(void) { //PUEDE ESTAR MAL
-    uint32_t i;
-
-    // El centro de la señal (offset) y la amplitud máxima para no saturar
-    float amplitude = DAC_MAX_VALUE / 2.0f;
-    float offset = DAC_MAX_VALUE / 2.0f;
-
-    for (i = 0; i < SAMPLES_PER_CYCLE; i++) {
-        // Calcular el ángulo en radianes para cada muestra (0 a 2*PI)
-        float angle = (2.0f * M_PI * i) / SAMPLES_PER_CYCLE;
-
-        // Generar el valor crudo de la seno, aplicar amplitud y offset
-        uint16_t raw_value = (uint16_t)(amplitude * sinf(angle) + offset);
-
-        // Correr 6 posiciones y guardar en el buffer
-        sine_buffer[i] = raw_value << 6;
-    }
-}

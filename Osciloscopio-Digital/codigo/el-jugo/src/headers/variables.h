@@ -25,7 +25,7 @@
 
 // Buffers globales para procesamiento (RAM Principal)
 extern uint8_t filtered_buffer[FILTERED_BUFFER_SIZE];
-extern uint8_t triangle_buffer[SAMPLES_PER_CYCLE];
+extern uint16_t triangle_buffer[SAMPLES_PER_CYCLE];
 
 // Doble buffer para el ADC (Declarados extern, el atributo __BSS va en el .c)
 extern uint32_t adc_buffer_A[ADC_BUFFER_SIZE];
@@ -34,9 +34,6 @@ extern uint32_t adc_buffer_B[ADC_BUFFER_SIZE];
 // Banderas de control del Ping-Pong (Llevan volatile por usarse en IRQs)
 extern volatile uint8_t active_dma_buffer;
 extern volatile uint8_t buffer_ready;
-
-extern uint16_t sine_buffer[SAMPLES_PER_CYCLE];
-extern uint16_t quad_buffer[SAMPLES_PER_CYCLE];
 
 //VARIABLES PAAR DAC
 extern volatile uint8_t sistema_dac_activo;

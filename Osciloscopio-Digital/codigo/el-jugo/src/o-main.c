@@ -46,19 +46,18 @@
 int main(void) {
     SystemInit();
 
+
+    generate_triangle_in_memory();
+    GPDMA_Init();
     conf_EXTI();
     conf_DAC();
     UART0_Init();
     ADC0_Init();
 
-    generate_triangle_in_memory();
-    generate_square_in_memory();
-    generate_sine_in_memory();
 
     dac_dma();
 
     // Inicializa el controlador GPDMA y habilita su interrupción en el micro
-    GPDMA_Init();
     NVIC_EnableIRQ(DMA_IRQn);
 
     // Habilita el ADC en modo ráfaga continua

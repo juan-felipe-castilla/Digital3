@@ -45,18 +45,11 @@ void conf_EXTI(){ //OK
 	EXTI_Init();
 
 	EXTI_CFG_T eint0;
-	EXTI_PinConfig(EXTI_EINT0, EXTI_NOPULL);
+	EXTI_PinConfig(EXTI_EINT0, EXTI_PULLUP);
 	eint0.line = EXTI_EINT0;
 	eint0.mode = EXTI_EDGE_SENSITIVE;
 	eint0.polarity = EXTI_FALLING_EDGE;
 	EXTI_Config(&eint0);
-
-	EXTI_CFG_T eint1;
-	EXTI_PinConfig(EXTI_EINT1, EXTI_NOPULL);
-	eint1.line = EXTI_EINT1;
-	eint1.mode = EXTI_EDGE_SENSITIVE;
-	eint1.polarity = EXTI_FALLING_EDGE;
-	EXTI_Config(&eint1);
 
 	EXTI_CFG_T eint2;
 	EXTI_PinConfig(EXTI_EINT1, EXTI_NOPULL);
@@ -65,50 +58,26 @@ void conf_EXTI(){ //OK
 	eint2.polarity = EXTI_FALLING_EDGE;
 	EXTI_Config(&eint2);
 
-	EXTI_EnableIRQ(EXTI_EINT1);
 	EXTI_EnableIRQ(EXTI_EINT0);
 	EXTI_EnableIRQ(EXTI_EINT2);
 }
 
 void EINT0_IRQHandler(void) {
-    // 1. Limpiar el flag de la interrupción
+    // 1. Limpiar el flag de la interrupción EINT0
     LPC_SC->EXTINT = (1 << 0);
+    if (sistema_dac_activo == 0){
+    	sistema_dac_activo = 1;
 
-    if (sistema_dac_activo == 0) {
-        sistema_dac_activo = 1;
-        canal_dma_actual = 1; // Arranca por defecto en canal 1
-
-        // 2. Nos aseguramos de que los otros canales estén totalmente apagados
-        GPDMA_ChannelStop(GPDMA_CH_2);
-        GPDMA_ChannelStop(GPDMA_CH_3);
-
-        // 3. Habilitar peticiones DMA del DAC
-        //OJETEACA NMO SE QUE ES ESTO PUEDE SER IMPORTANTELPC_DAC->DACCTRL |= (1 << 3) | (1 << 2);
-
-        // 4. Arrancamos el canal 1
-        GPDMA_ChannelStart(GPDMA_CH_1);
+    // 3. Arrancar el Canal 1 (Triangular) directamente
+    GPDMA_ChannelResume(GPDMA_CH_1);
+    }
+    else if (sistema_dac_activo == 1){
+    	sistema_dac_activo = 0;
+    	GPDMA_ChannelGracefulStop(GPDMA_CH_1);
     }
 }
 
-void EINT1_IRQHandler(void) {
-    // 1. Limpiar el flag de la interrupción
-    LPC_SC->EXTINT = (1 << 1);
 
-    if (sistema_dac_activo == 1) {
-
-        // 2. Frenamos en seco el canal actual
-        GPDMA_ChannelStop(canal_dma_actual);
-
-        // 3. Pasamos al siguiente canal
-        canal_dma_actual++;
-        if (canal_dma_actual > 3) {
-            canal_dma_actual = 1;
-        }
-
-        // 4. Arrancamos el canal nuevo
-        GPDMA_ChannelStart(canal_dma_actual);
-    }
-}
 
 void EINT2_IRQHandler(void) {
     // 1. Limpiar el flag de la interrupción externa

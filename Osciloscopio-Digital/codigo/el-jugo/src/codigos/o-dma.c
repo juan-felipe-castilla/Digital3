@@ -120,35 +120,22 @@ void DMA_IRQHandler(void) {
 }
 
 void dac_dma(void) {
-    // Esto asegura que campos críticos (como el puntero de DMALLI)
-    // no arranquen con basura de la RAM y crasheen el micro.
     GPDMA_Channel_CFG_T DACCfgT = {0};
-    GPDMA_Channel_CFG_T DACCfgS = {0};
-    GPDMA_Channel_CFG_T DACCfgQ = {0};
 
-    GPDMA_LLI_T triangle_signal;
-    GPDMA_LLI_T sin_signal;
-    GPDMA_LLI_T quad_signal;
+    // CRÍTICO: Debe ser static para que el hardware la siga encontrando en memoria
+    static GPDMA_LLI_T triangle_signal;
 
-    //LLI
-    sin_signal.srcAddr = (uint32_t)sine_buffer;
-    sin_signal.dstAddr = (uint32_t)&(LPC_DAC->DACR);
-   	sin_signal.nextLLI = (uint32_t)&sin_signal;
-   	sin_signal.control = (1024 | (1 << 18) | (1 << 21) | (1 << 26));
-
-    quad_signal.srcAddr = (uint32_t)quad_buffer;
-   	quad_signal.dstAddr = (uint32_t)&(LPC_DAC->DACR);
-    quad_signal.nextLLI = (uint32_t)&quad_signal;
-    quad_signal.control = (1024 | (1 << 18) | (1 << 21) | (1 << 26));
-
+    // Configuración de la Lista Enlazada (LLI) para bucle infinito
     triangle_signal.srcAddr = (uint32_t)triangle_buffer;
     triangle_signal.dstAddr = (uint32_t)&(LPC_DAC->DACR);
     triangle_signal.nextLLI = (uint32_t)&triangle_signal;
-    triangle_signal.control = (1024 | (1 << 18) | (1 << 21) | (1 << 26));
 
-    // Configura los parámetros del cana l (triangle) DMA
+    // El tamaño de control DEBE ser el tamaño de tu arreglo (SAMPLES_PER_CYCLE)
+    triangle_signal.control = (SAMPLES_PER_CYCLE | (1 << 18) | (1 << 21) | (1 << 26));
+
+    // Configura los parámetros del canal 1 (Triangular)
     DACCfgT.channelNum = GPDMA_CH_1;
-    DACCfgT.transferSize = 1024;
+    DACCfgT.transferSize = SAMPLES_PER_CYCLE;
     DACCfgT.type = GPDMA_M2P;
     DACCfgT.srcMemAddr = (uint32_t)triangle_buffer;
     DACCfgT.srcConn = 0;
@@ -156,7 +143,7 @@ void dac_dma(void) {
     DACCfgT.dstConn = GPDMA_DAC;
     DACCfgT.linkedList = (uint32_t)&triangle_signal;
 
-    DACCfgT.src.width = GPDMA_HALFWORD;
+    DACCfgT.src.width = GPDMA_HALFWORD; // Los datos son de 16 bits
     DACCfgT.src.burst = GPDMA_BSIZE_1;
     DACCfgT.src.increment = ENABLE;
 
@@ -167,54 +154,8 @@ void dac_dma(void) {
     DACCfgT.intTC = DISABLE;
     DACCfgT.intErr = DISABLE;
 
-    // Aplica
+    // Aplicar configuración y dejar el canal en espera
     GPDMA_SetupChannel(&DACCfgT);
-
-    // Configura los parámetros del canal 2 (sine) DMA
-    DACCfgS.channelNum = GPDMA_CH_2;
-    DACCfgS.transferSize = 1024;
-    DACCfgS.type = GPDMA_M2P;
-    DACCfgS.srcMemAddr = (uint32_t)sine_buffer;
-    DACCfgS.srcConn = 0;
-    DACCfgS.dstMemAddr = (uint32_t)&(LPC_DAC->DACR);
-    DACCfgS.dstConn = GPDMA_DAC;
-    DACCfgT.linkedList = (uint32_t)&sin_signal;
-
-    DACCfgS.src.width = GPDMA_HALFWORD;
-    DACCfgS.src.burst = GPDMA_BSIZE_1;
-    DACCfgS.src.increment = ENABLE;
-
-    DACCfgS.dst.width = GPDMA_HALFWORD;
-    DACCfgS.dst.burst = GPDMA_BSIZE_1;
-    DACCfgS.dst.increment = DISABLE;
-
-    DACCfgS.intTC = DISABLE;
-    DACCfgS.intErr = DISABLE;
-
-    // Aplica
-    GPDMA_SetupChannel(&DACCfgS);
-
-    // Configura los parámetros del canal 3 (square) DMA
-    DACCfgQ.channelNum = GPDMA_CH_3;
-    DACCfgQ.transferSize = 1024;
-    DACCfgQ.type = GPDMA_M2P;
-    DACCfgQ.srcMemAddr = (uint32_t)quad_buffer;
-    DACCfgQ.srcConn = 0;
-    DACCfgQ.dstMemAddr = (uint32_t)&(LPC_DAC->DACR);
-    DACCfgQ.dstConn = GPDMA_DAC;
-    DACCfgT.linkedList = (uint32_t)&quad_signal;
-
-    DACCfgQ.src.width = GPDMA_HALFWORD;
-    DACCfgQ.src.burst = GPDMA_BSIZE_1;
-    DACCfgQ.src.increment = ENABLE;
-
-    DACCfgQ.dst.width = GPDMA_HALFWORD;
-    DACCfgQ.dst.burst = GPDMA_BSIZE_1;
-    DACCfgQ.dst.increment = DISABLE;
-
-    DACCfgQ.intTC = DISABLE;
-    DACCfgQ.intErr = DISABLE;
-
-    // Aplica
-    GPDMA_SetupChannel(&DACCfgQ);
+    GPDMA_ChannelStart(GPDMA_CH_1);
+    GPDMA_ChannelPause(GPDMA_CH_1);
 }

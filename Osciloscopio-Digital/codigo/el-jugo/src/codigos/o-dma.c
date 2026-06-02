@@ -159,6 +159,4 @@ void dac_dma(void) {
     GPDMA_ChannelStart(GPDMA_CH_1);
     GPDMA_ChannelPause(GPDMA_CH_1);
 
-    GPDMA_ChannelResume(GPDMA_CH_1);
-    GPIO_SetPins(PORT_0, 2097152);
 }

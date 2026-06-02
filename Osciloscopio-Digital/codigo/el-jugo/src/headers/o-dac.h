@@ -10,5 +10,8 @@
 
 void conf_DAC();
 void generate_triangle_in_memory(void);
+void generate_square_in_memory(void);
+void generate_sine_in_memory(void);
+void conf_LED(void);
 
 #endif /* O_DAC_H_ */

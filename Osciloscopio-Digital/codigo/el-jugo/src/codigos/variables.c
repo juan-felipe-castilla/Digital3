@@ -4,7 +4,7 @@
 
 // Definición de buffers en RAM principal
 uint8_t filtered_buffer[FILTERED_BUFFER_SIZE];
-uint16_t triangle_buffer[SAMPLES_PER_CYCLE];
+uint16_t signal_buffer[SAMPLES_PER_CYCLE];
 
 // Definición asignando los bancos de memoria específicos (AHB RAM de la LPC1769)
 __BSS(RAM2) uint32_t adc_buffer_A[ADC_BUFFER_SIZE];
@@ -18,7 +18,7 @@ uint8_t contDAC = 0;
 uint8_t contDACen = 0;
 
 volatile uint8_t sistema_dac_activo = 0;
-volatile uint8_t canal_dma_actual = 1;  // 1: Triángulo, 2: Seno, 3: Cuadrada
+volatile uint8_t current_wave = 1;  // 1: Triángulo, 2: Seno, 3: Cuadrada
 
 volatile uint8_t estado_captura = 0;
 volatile uint32_t t1 = 0;

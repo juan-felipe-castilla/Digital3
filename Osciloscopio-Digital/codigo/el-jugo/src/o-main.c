@@ -1,3 +1,4 @@
+
 #ifdef __USE_CMSIS
 #include "LPC17xx.h"
 #endif
@@ -39,14 +40,14 @@
 #include "headers/o-uart.h"
 #include "headers/o-dac.h"
 #include "headers/o-exti.h"
-#include "headers/o-tim0CAP.h"
+#include "headers/o-tim2CAP.h"
 #include "headers/variables.h"
 
 
 int main(void) {
     SystemInit();
 
-
+    conf_LED();
     generate_triangle_in_memory();
     GPDMA_Init();
     conf_EXTI();
@@ -67,7 +68,7 @@ int main(void) {
     // Dispara la primera captura del DMA
     capture_adc_dma_start();
 
-    confTIM0();
+    confTIM2();
     confCAP();
 
     while(1) {
@@ -96,6 +97,7 @@ int main(void) {
 
            //COSA PARA MOSTRAR LA FRECUENCIA 1 SOLA VEZ
             if (nueva_medicion_lista == 1) {
+            			printf("%lu",&periodo_ticks);
 
                         // 1. Calculamos la frecuencia
                         if (periodo_ticks > 0) {

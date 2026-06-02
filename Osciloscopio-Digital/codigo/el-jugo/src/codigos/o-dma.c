@@ -126,7 +126,7 @@ void dac_dma(void) {
     static GPDMA_LLI_T triangle_signal;
 
     // Configuración de la Lista Enlazada (LLI) para bucle infinito
-    triangle_signal.srcAddr = (uint32_t)triangle_buffer;
+    triangle_signal.srcAddr = (uint32_t)signal_buffer;
     triangle_signal.dstAddr = (uint32_t)&(LPC_DAC->DACR);
     triangle_signal.nextLLI = (uint32_t)&triangle_signal;
 
@@ -137,7 +137,7 @@ void dac_dma(void) {
     DACCfgT.channelNum = GPDMA_CH_1;
     DACCfgT.transferSize = SAMPLES_PER_CYCLE;
     DACCfgT.type = GPDMA_M2P;
-    DACCfgT.srcMemAddr = (uint32_t)triangle_buffer;
+    DACCfgT.srcMemAddr = (uint32_t)signal_buffer;
     DACCfgT.srcConn = 0;
     DACCfgT.dstMemAddr = (uint32_t)&(LPC_DAC->DACR);
     DACCfgT.dstConn = GPDMA_DAC;
@@ -158,4 +158,7 @@ void dac_dma(void) {
     GPDMA_SetupChannel(&DACCfgT);
     GPDMA_ChannelStart(GPDMA_CH_1);
     GPDMA_ChannelPause(GPDMA_CH_1);
+
+    GPDMA_ChannelResume(GPDMA_CH_1);
+    GPIO_SetPins(PORT_0, 2097152);
 }

@@ -85,20 +85,14 @@ void EINT0_IRQHandler(void) {
     }
     else if (sistema_dac_activo == 1){
     	sistema_dac_activo = 0;
-    	GPDMA_ChannelGracefulStop(GPDMA_CH_1);
-    	GPIO_ClearPins(PORT_0, 2097152);
+    	GPDMA_ChannelGracefulStop(GPDMA_CH_1); //espera que termine la transimision y la frena
+    	GPIO_ClearPins(PORT_0, 2097152);//Mascara de pines
     }
 }
 
 void EINT1_IRQHandler(void) {
     // 1. Limpiar el flag físico de la interrupción (CRÍTICO)
     LPC_SC->EXTINT = (1 << 1);
-
-
-
-    // 2. Frenar el DMA INMEDIATAMENTE.
-    // Si no hacemos esto, el DMA va a leer el buffer por la mitad mientras
-    // la CPU lo está reescribiendo, generando un ruido espantoso en el DAC.
 
     // 3. Lógica para ciclar al siguiente canal (1 -> 2 -> 3 -> 1)
     current_wave++;
@@ -108,19 +102,19 @@ void EINT1_IRQHandler(void) {
 
     // 4. Reescribir el buffer en memoria "en caliente"
     if (current_wave == 1) {
-        generate_triangle_in_memory(); //ROJO
+        generate_triangle_in_memory();
         GPIO_SetPins(PORT_0, 4194304);
         GPIO_ClearPins(PORT_0, 134217728);
         GPIO_ClearPins(PORT_0, 268435456);
     }
     else if (current_wave == 2) {
-        generate_sine_in_memory();    //AMARILLO
+        generate_sine_in_memory();
         GPIO_ClearPins(PORT_0, 4194304);
         GPIO_SetPins(PORT_0, 134217728);
         GPIO_ClearPins(PORT_0, 268435456);
     }
     else if (current_wave == 3) {
-        generate_square_in_memory();   //VERDE
+        generate_square_in_memory();
         GPIO_ClearPins(PORT_0, 4194304);
         GPIO_ClearPins(PORT_0, 134217728);
         GPIO_SetPins(PORT_0, 268435456);

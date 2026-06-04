@@ -42,13 +42,13 @@
 void conf_DAC(){ //OK
 	static DAC_CONVERTER_CFG_T dacCfg;
 	DAC_Init();   			//Inicializamos el DAC y su pin
-	DAC_SetBias(DAC_700uA); //Se banca hasta 400 KHz
+	DAC_SetBias(DAC_700uA); //Se banca hasta 1000 KHz
 	dacCfg.dmaCounter = ENABLE;
 	dacCfg.dmaRequest = ENABLE;
 	dacCfg.doubleBuffer = DISABLE;
 	DAC_ConfigDAConverterControl(&dacCfg);
-	DAC_SetDMATimeOut(300); //El periodo de las senales genradas es de 512 muestras y su frecuencia esperada es de 1Khz,por lo tanto
-						   //1ms/512 = 1954nS, luego 1954nS/40nS = 49
+	DAC_SetDMATimeOut(300);
+
 	DAC_UpdateValue(0);    //Limpiamos lo que este en el DAC
 }
 

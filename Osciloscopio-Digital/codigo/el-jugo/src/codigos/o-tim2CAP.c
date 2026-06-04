@@ -79,23 +79,27 @@ void TIMER2_IRQHandler(void) {
             case 1:
                 // Primer flanco detectado: guardamos el tiempo t1
                 t1 = LPC_TIM2->CR0;
-                printf("El valor de t1 es: %d\r\n", t1);
+
+               // printf("El valor de t1 es: %d\r\n", t1);
                 estado_captura = 2; // Preparamos para el próximo flanco
                 break; // <-- CRÍTICO: Evita que el código caiga al 'case 2' en esta misma ejecución
+
+
 
             case 2:
                 // Segundo flanco detectado: guardamos el tiempo t2
                 t2 = LPC_TIM2->CR0;
-                printf("El valor de t2 es: %d\r\n", t2);
+               // printf("El valor de t2 es: %d\r\n", t2);
                 // Calculamos la diferencia en ticks
                 periodo_ticks = t2 - t1;
 
                 // Apagamos el Timer para ahorrar CPU
-                TIM_Disable(LPC_TIM2);
+
 
                 // Reiniciamos el estado
                 estado_captura = 0;
                 nueva_medicion_lista = 1; // Avisamos al main()
+                //NVIC_DisableIRQ(TIMER2_IRQn);
                 break;
 
             default:

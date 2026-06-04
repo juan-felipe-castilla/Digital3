@@ -70,6 +70,7 @@ int main(void) {
 
     confTIM2();
     confCAP();
+    TIM_Enable(LPC_TIM2);
 
     while(1) {
             uint8_t buffer_a_procesar_local = 0;
@@ -98,18 +99,18 @@ int main(void) {
            //COSA PARA MOSTRAR LA FRECUENCIA 1 SOLA VEZ
             if (nueva_medicion_lista == 1) {
 
-            	printf("periodo total ticks: %u\r\n", periodo_ticks);
                         // 1. Calculamos la frecuencia
                         if (periodo_ticks > 0) {
-                            frecuencia_hz = 100000 / periodo_ticks;
-                            printf("frecijuencianasheee  ");          //Esta formula puede estar incorrecta. Ver en clase jueves 4/6
+                            frecuencia_hz =100000 / periodo_ticks;
                         } else {
                             frecuencia_hz = 0;
-                            printf ("cero   ");
                         }
 
                         // 2. Imprimimos en la terminal (printf usa la UART por defecto si el retarget está configurado)
                         printf("La frecuencia es: %lu Hz\n\r", frecuencia_hz);
+                        t1 = 0;
+                        t2 = 0;
+                        TIM_ResetCounter(LPC_TIM2);
 
                         // 3. Bajamos la bandera para que NO se vuelva a imprimir
                         // hasta que el usuario presione EINT2 otra vez

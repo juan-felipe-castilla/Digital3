@@ -74,7 +74,7 @@ void EINT0_IRQHandler(void) {
     // 1. Limpiar el flag de la interrupción EINT0
     LPC_SC->EXTINT = (1 << 0);
 
-    printf("0");
+
 
     if (sistema_dac_activo == 0){
     	sistema_dac_activo = 1;
@@ -94,7 +94,7 @@ void EINT1_IRQHandler(void) {
     // 1. Limpiar el flag físico de la interrupción (CRÍTICO)
     LPC_SC->EXTINT = (1 << 1);
 
-    printf("1");
+
 
     // 2. Frenar el DMA INMEDIATAMENTE.
     // Si no hacemos esto, el DMA va a leer el buffer por la mitad mientras
@@ -135,18 +135,18 @@ void EINT2_IRQHandler(void) {
     // 1. Limpiar el flag de la interrupción externa
     LPC_SC->EXTINT = (1 << 2);
 
-    printf("2");
+
 
     // Solo disparamos una nueva lectura si el sistema está inactivo
     if (estado_captura == 0) {
         // 2. Resetear el contador del Timer0 (opcional, pero buena práctica)
-        LPC_TIM2->TCR |= (1 << 1);  // Reset
-        LPC_TIM2->TCR &= ~(1 << 1); // Liberar Reset
-
+       // LPC_TIM2->TCR |= (1 << 1);  // Reset
+       // LPC_TIM2->TCR &= ~(1 << 1); // Liberar Reset
+    	//NVIC_EnableIRQ(TIMER2_IRQn);
         // 3. Establecer el estado para esperar el primer flanco
         estado_captura = 1;
 
         // 4. Arrancar el Timer2
-        TIM_Enable(LPC_TIM2);
+
     }
 }

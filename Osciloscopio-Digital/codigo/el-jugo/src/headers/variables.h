@@ -41,9 +41,9 @@ extern volatile uint8_t current_wave;  // 1: Triángulo, 2: Seno, 3: Cuadrada
 
 //VARIABLES TMR0CAP
 extern volatile uint8_t estado_captura;
-extern volatile uint32_t t1;
-extern volatile uint32_t t2;
-extern volatile uint32_t periodo_ticks;
+extern volatile int t1;
+extern volatile int t2;
+extern volatile int periodo_ticks;
 extern volatile uint8_t nueva_medicion_lista;
 extern uint32_t frecuencia_hz;
 #endif // VARIABLES_H

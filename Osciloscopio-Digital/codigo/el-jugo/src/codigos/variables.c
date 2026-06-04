@@ -21,8 +21,8 @@ volatile uint8_t sistema_dac_activo = 0;
 volatile uint8_t current_wave = 1;  // 1: Triángulo, 2: Seno, 3: Cuadrada
 
 volatile uint8_t estado_captura = 0;
-volatile uint32_t t1 = 0;
-volatile uint32_t t2 = 0;
-volatile uint32_t periodo_ticks = 0;
+volatile int t1 = 0;
+volatile int t2 = 0;
+volatile int periodo_ticks = 1;
 volatile uint8_t nueva_medicion_lista = 0; // Bandera de aviso
 uint32_t frecuencia_hz = 0;

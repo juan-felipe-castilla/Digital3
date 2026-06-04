@@ -73,27 +73,35 @@ void TIMER2_IRQHandler(void) {
         // 1. Limpiar el flag de interrupción de captura CR0
         LPC_TIM2->IR = (1 << 4);
 
-        // 2. Máquina de estados de medición
-        if (estado_captura == 1) {
-            // Primer flanco detectado: guardamos el tiempo t1
-        	printf("primer flanco  ");
-            t1 = LPC_TIM2->CR0;
-            estado_captura = 2; // Avanzamos al siguiente estado
+        // 2. Máquina de estados de medición usando 'switch'
+        switch (estado_captura) {
 
-        } else if (estado_captura == 2) {
-            // Segundo flanco detectado: guardamos el tiempo t2
-            t2 = LPC_TIM2->CR0;
-            printf("segundo flanco   ");
-            // Calculamos la diferencia en ticks
-            // (Si t2 < t1 ocurrió un desbordamiento, pero con 32 bits a 10us tarda horas)
-            periodo_ticks = t2 - t1;
+            case 1:
+                // Primer flanco detectado: guardamos el tiempo t1
+                t1 = LPC_TIM2->CR0;
+                printf("El valor de t1 es: %d\r\n", t1);
+                estado_captura = 2; // Preparamos para el próximo flanco
+                break; // <-- CRÍTICO: Evita que el código caiga al 'case 2' en esta misma ejecución
 
-            // Apagamos el Timer para ahorrar CPU
-            TIM_Disable(LPC_TIM2);
+            case 2:
+                // Segundo flanco detectado: guardamos el tiempo t2
+                t2 = LPC_TIM2->CR0;
+                printf("El valor de t2 es: %d\r\n", t2);
+                // Calculamos la diferencia en ticks
+                periodo_ticks = t2 - t1;
 
-            // Reiniciamos el estado para que EINT2 pueda volver a disparar en el futuro
-            estado_captura = 0;
-            nueva_medicion_lista = 1; //Variable para que en el main se muestre la frecuencia.
+                // Apagamos el Timer para ahorrar CPU
+                TIM_Disable(LPC_TIM2);
+
+                // Reiniciamos el estado
+                estado_captura = 0;
+                nueva_medicion_lista = 1; // Avisamos al main()
+                break;
+
+            default:
+                // Si el estado es 0 u otro valor, no hacemos nada
+                break;
         }
     }
 }
+

@@ -140,13 +140,13 @@ void EINT2_IRQHandler(void) {
     // Solo disparamos una nueva lectura si el sistema está inactivo
     if (estado_captura == 0) {
         // 2. Resetear el contador del Timer0 (opcional, pero buena práctica)
-        LPC_TIM0->TCR |= (1 << 1);  // Reset
-        LPC_TIM0->TCR &= ~(1 << 1); // Liberar Reset
+        LPC_TIM2->TCR |= (1 << 1);  // Reset
+        LPC_TIM2->TCR &= ~(1 << 1); // Liberar Reset
 
         // 3. Establecer el estado para esperar el primer flanco
         estado_captura = 1;
 
-        // 4. Arrancar el Timer0
-        TIM_Enable(LPC_TIM0);
+        // 4. Arrancar el Timer2
+        TIM_Enable(LPC_TIM2);
     }
 }

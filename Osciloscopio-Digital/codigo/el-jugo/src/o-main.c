@@ -97,11 +97,9 @@ int main(void) {
 
            //COSA PARA MOSTRAR LA FRECUENCIA 1 SOLA VEZ
             if (nueva_medicion_lista == 1) {
-            			printf("%lu",&periodo_ticks);
-
                         // 1. Calculamos la frecuencia
                         if (periodo_ticks > 0) {
-                            frecuencia_hz = 100000 / periodo_ticks;
+                            frecuencia_hz = 100000 / periodo_ticks; 			//Esta formula puede estar incorrecta. Ver en clase jueves 4/6
                         } else {
                             frecuencia_hz = 0;
                         }

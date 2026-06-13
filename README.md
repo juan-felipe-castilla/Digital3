@@ -18,12 +18,15 @@ El objetivo principal es la **adquisición de señales analógicas**, su procesa
 ### 🎯 Alcances del Proyecto (¿Qué hace y qué NO hace el sistema?)
 Delimiten claramente los objetivos alcanzados para la entrega final:
 * **El sistema SÍ es capaz de:**
-* *Muestrear y procesar señales de frecuencias medias, bajas.
+* 
+* Muestrear y procesar señales de frecuencias medias, bajas.
 * Una precisión en su medidas válidas para realizar pruebas en casa
 * Atenuar señales de entrada, para así ampliar su rango dinamico
 * Generar señales de frecuencia fija
 * Mostrar tanto niveles de amplitud y tiempo, junto a un botón que muestra la frecuencia de entrada
+* 
 * **El sistema NO incluye (Fuera de alcance):**
+* 
 * Muestreo de alta frecuencia
 * Una precisión comparable a uno comercial
 * Un trigger ajustable
@@ -53,14 +56,14 @@ Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito pr
 
 ## ⚡ 3. Especificaciones Eléctricas, Alimentación y Entorno (Específico por Asignatura)
 
-### 🔌 Parámetros de Alimentación y Consumo (Común a ambas materias)
+### 🔌 Parámetros de Alimentación y Consumo
 * **Tensión de operación del sistema:** 3.3V
 * **Método de alimentación:**  Fuente de alimentación externa
 * **Consumo estimado o medido:** * En modo activo, con todos sus modulos operativos 100mA, debido a que el unico componente activo es la lpc
 * En modo pasivo(sin el generador de funciones) el consumo baja a los 67mA
 
 
-### 📌 [OPCIÓN B: Solo para alumnos de Electrónica Digital III (Cortex-M / ARM)]
+### 📌 Entorno:
 * **IDE y SDK:** MCUXpresso IDE v11.8 con LPCOpen v2.10
 * **Microcontrolador Principal:** NXP LPC1769 
 * **Bibliotecas de Terceros y Versiones:** --.

@@ -1,5 +1,5 @@
 # Osciloscopio Digital
-> **Asignatura:** Electrónica Digital [III] - Universidad Nacional de Córdoba
+> **Asignatura:** Electrónica Digital III - Universidad Nacional de Córdoba
 > **Integrantes:** >
 >  - **Viberti, Benjamín**
 >  - **Castilla, Felipe**
@@ -15,7 +15,7 @@ Este proyecto consiste en el diseño y desarrollo de un **Osciloscopio Digital**
 El objetivo principal es la **adquisición de señales analógicas**, su procesamiento  mediante técnicas de software y hardware  y la transmisión a una computadora para su visualización, mediante UART, y tambien posee un generador de funciones interno, para así poder realizar ensayos a diferentes dispositivos.
 
 
-### 🎯 Alcances del Proyecto (¿Qué hace y qué NO hace el sistema?)
+### 🎯 Alcances del Proyecto 
 Delimiten claramente los objetivos alcanzados para la entrega final:
 * **El sistema SÍ es capaz de:**
 * 
@@ -25,13 +25,13 @@ Delimiten claramente los objetivos alcanzados para la entrega final:
 * Generar señales de frecuencia fija
 * Mostrar tanto niveles de amplitud y tiempo, junto a un botón que muestra la frecuencia de entrada
 * 
-* **El sistema NO incluye (Fuera de alcance):**
+* **El sistema NO incluye:**
 * 
 * Muestreo de alta frecuencia
 * Una precisión comparable a uno comercial
 * Un trigger ajustable
 
-### ⏩ Posibles Etapas Siguientes (Líneas Futuras)
+### ⏩ Posibles Etapas Siguientes
 Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito profesional:
 * Utilizar otro protocolo de comunicación serie, más eficiente
 * Utilizar un módulo de adc más exacto, externo
@@ -40,7 +40,7 @@ Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito pr
 
 ---
 
-## 📐 2. Arquitectura del Sistema: Hardware y Software (Común)
+## 📐 2. Arquitectura del Sistema: Hardware y Software
 
 ### 🔌 Hardware & Interconexión
 * **Diagrama de Bloques:** <img width="1436" height="833" alt="Diagrama_Circuito" src="Diagrama_Hardware.pdf" />
@@ -48,15 +48,15 @@ Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito pr
   <img width="1436" height="833" alt="image" src="https://github.com/user-attachments/assets/d00f7812-289d-4fc9-b759-fd9c6c0528b7" />
 
 * **Descripción del Circuito y Consideraciones de Diseño:** En la entrada posee 2 atenuadores intercambiables de 6DB y 20DB, junto con
-* un filtro pasa-bajos que cumple la funcion de filtro anti Aliasing.
+ un filtro pasa-bajos que cumple la funcion de filtro anti Aliasing.
 * Los botones de interrupcion poseen filtros anti rebote fisicos.
 
-### 💻 Arquitectura de Software (Firmware)
-* **Diagrama de Flujo o Máquina de Estados:** <img width="1436" height="833" alt="Diagrama_Codigo" src="Diagrama_Code.pdf" />
+### 💻 Arquitectura de Software
+* **Diagrama de Flujo:** <img width="1436" height="833" alt="Diagrama_Codigo" src="Diagrama_Code.pdf" />
 
 ---
 
-## ⚡ 3. Especificaciones Eléctricas, Alimentación y Entorno (Específico por Asignatura)
+## ⚡ 3. Especificaciones Eléctricas, Alimentación y Entorno
 
 ### 🔌 Parámetros de Alimentación y Consumo
 * **Tensión de operación del sistema:** 3.3V
@@ -70,11 +70,11 @@ Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito pr
 * **Microcontrolador Principal:** NXP LPC1769 
 * **Bibliotecas de Terceros y Versiones:** --.
 * **Periféricos Avanzados Utilizados:** GPDMA, TIMER, ADC, DAC, UART, GPIO, NVIC ...
-* **Estrategia de Concurrencia:** Expliquen la arquitectura elegida: [Ej: Bare-metal con máquina de estados cooperativa / RTOS (FreeRTOS) detallando las tareas creadas y sus prioridades].
+* **Estrategia de Concurrencia:** ?
 
 ---
 
-## 🔄 4. Proceso de Integración y Desarrollo (Común)
+## 🔄 4. Proceso de Integración y Desarrollo
 Describan cronológicamente cómo fueron sumando y testeando las diferentes partes del proyecto (enfoque modular de ingeniería).
 
 * **Etapa 1 (Pruebas UART):** El primer paso fue implementar una UART funcional .
@@ -86,7 +86,7 @@ Describan cronológicamente cómo fueron sumando y testeando las diferentes part
 
 ---
 
-## 📊 5. Ensayos, Pruebas y Resultados (Común)
+## 📊 5. Ensayos, Pruebas y Resultados
 Demuestren con datos empíricos que el sistema funciona correctamente. **Es obligatorio incluir registro visual**.
 
 * **Pruebas Funcionales Realizadas:** Detallen los ensayos (Ej: "Se inyectó una señal controlada para medir la precisión del ADC...").
@@ -95,7 +95,7 @@ Demuestren con datos empíricos que el sistema funciona correctamente. **Es obli
 
 ---
 
-## 📂 6. Estructura del Repositorio (Común)
+## 📂 6. Estructura del Repositorio
 El repositorio debe mantener obligatoriamente la siguiente estructura limpia (¡Recuerden configurar correctamente el `.gitignore` para no subir carpetas temporales como `Debug/`, `Release/` o archivos `.p1` / `.d`!).
 
 ```text

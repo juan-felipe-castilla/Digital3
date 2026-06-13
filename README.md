@@ -43,14 +43,16 @@ Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito pr
 ## 📐 2. Arquitectura del Sistema: Hardware y Software (Común)
 
 ### 🔌 Hardware & Interconexión
-* **Diagrama de Bloques:** [Insertar imagen o link al diagrama de bloques del hardware]
+* **Diagrama de Bloques:** <img width="1436" height="833" alt="Diagrama_Circuito" src="Diagrama_Hardware.pdf" />
 * **Esquemático del Circuito:** 
   <img width="1436" height="833" alt="image" src="https://github.com/user-attachments/assets/d00f7812-289d-4fc9-b759-fd9c6c0528b7" />
 
-* **Descripción del Circuito y Consideraciones de Diseño:** Breve explicación de las etapas (ej: acoplamiento de señales, protecciones inductivas, filtrado, etc.).
+* **Descripción del Circuito y Consideraciones de Diseño:** En la entrada posee 2 atenuadores intercambiables de 6DB y 20DB, junto con
+* un filtro pasa-bajos que cumple la funcion de filtro anti Aliasing.
+* Los botones de interrupcion poseen filtros anti rebote fisicos.
 
 ### 💻 Arquitectura de Software (Firmware)
-* **Diagrama de Flujo o Máquina de Estados:** <img width="1436" height="833" alt="image1" src="Diagrama_Code.pdf" />
+* **Diagrama de Flujo o Máquina de Estados:** <img width="1436" height="833" alt="Diagrama_Codigo" src="Diagrama_Code.pdf" />
 
 ---
 

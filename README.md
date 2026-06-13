@@ -4,8 +4,8 @@
 >  - **Viberti, Benjamín**
 >  - **Castilla, Felipe**
 >  - **Dalmazzo, Agustín**
-> **Profesor:**
-> - **Blasco Marcos**
+ **Profesor:**
+ - **Blasco Marcos**
 
 ---
 

@@ -1,61 +1,102 @@
-# 📟 Proyecto Trabajo Final Electrónica Digital 3: Osciloscopio Digital
+# [Osciloscopio Digital]
+> **Asignatura:** Electrónica Digital [III] - Universidad Nacional de Córdoba
+> **Integrantes:** >
+>  - **Viberti, Benjamín**
+>  - **Castilla, Felipe**
+>  - **Dalmazzo, Agustín**
+> **Profesor:**
+> - **Blasco Marcos**
 
 ---
 
-## 🎯 Descripción General
-
+## 🚀 1. Descripción General del Proyecto
 Este proyecto consiste en el diseño y desarrollo de un **Osciloscopio Digital** basado en el microcontrolador **LPC1769** (arquitectura ARM Cortex-M3).
 
-El objetivo principal es la **adquisición precisa de señales analógicas**, su procesamiento eficiente mediante técnicas de hardware avanzado y la transmisión a una computadora para su visualización.
+El objetivo principal es la **adquisición de señales analógicas**, su procesamiento  mediante técnicas de software y hardware  y la transmisión a una computadora para su visualización, mediante UART, y tambien posee un generador de funciones interno, para así poder realizar ensayos a diferentes dispositivos.
+
+
+### 🎯 Alcances del Proyecto (¿Qué hace y qué NO hace el sistema?)
+Delimiten claramente los objetivos alcanzados para la entrega final:
+* **El sistema SÍ es capaz de:**
+* *Muestrear y procesar señales de frecuencias medias, bajas.
+* Una precisión en su medidas válidas para realizar pruebas en casa
+* Atenuar señales de entrada, para así ampliar su rango dinamico
+* Generar señales de frecuencia fija
+* Mostrar tanto niveles de amplitud y tiempo, junto a un botón que muestra la frecuencia de entrada
+* **El sistema NO incluye (Fuera de alcance):**
+* Muestreo de alta frecuencia
+* Una precisión comparable a uno comercial
+* Un trigger ajustable
+
+### ⏩ Posibles Etapas Siguientes (Líneas Futuras)
+Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito profesional:
+* Utilizar otro protocolo de comunicación serie, más eficiente
+* Utilizar un módulo de adc más exacto, externo
+* Agregar una punta compensada
+* Poder hacerlo portatil, es decir, que no se requiera una computadora completa para su funcionamiento
 
 ---
 
-## 👨‍💻 Autores
+## 📐 2. Arquitectura del Sistema: Hardware y Software (Común)
 
-- **Viberti, Benjamín**
-- **Castilla, Felipe**
-- **Dalmazzo, Agustín**
+### 🔌 Hardware & Interconexión
+* **Diagrama de Bloques:** [Insertar imagen o link al diagrama de bloques del hardware]
+* **Esquemático del Circuito:** *[Inserte aquí la captura de imagen/render del esquemático completo desarrollado en KiCad/Altium]*
+  `![Esquemático Completo](hardware/esquematico.png)`
+* **Descripción del Circuito y Consideraciones de Diseño:** Breve explicación de las etapas (ej: acoplamiento de señales, protecciones inductivas, filtrado, etc.).
 
----
-
-## 🛠️ Arquitectura y Módulos del Sistema
-
-Para garantizar la máxima frecuencia de trabajo sin saturar el procesador, el código está estructurado de manera modular, delegando tareas pesadas a los periféricos de hardware y usando DMA e interrupciones.
-
----
-
-### 🎛️ 1. ADC (Convertidor Analógico a Digital)
-- **Función:** Digitaliza la señal analógica proveniente del mundo exterior.
-- **Implementación:**  
-  - Resolución de **12 bits**, brindando excelente fidelidad.
-  - Alta velocidad de muestreo, sincronizado eficientemente.
+### 💻 Arquitectura de Software (Firmware)
+* **Diagrama de Flujo o Máquina de Estados:** *[Inserte aquí la imagen del diagrama que explique el lazo principal o el comportamiento del sistema]*
+  `![Diagrama de Flujo / Máquina de Estados](docs/diagrama_software.png)`
 
 ---
 
-### ⚡ 2. DMA (Acceso Directo a Memoria)
-- **Función:** Mueve datos entre RAM y periféricos (ADC y DAC) de forma **100% autónoma**—sin interrupciones ni consumo de ciclos de CPU.
-- **Implementación:**  
-    - Canales en modo **P2M** (Periférico a Memoria): almacenan lecturas ADC.
-    - Canales en modo **M2P** (Memoria a Periférico): inyectan datos al DAC.
-    - Interconexión inteligente para cadena de datos eficiente.
+## ⚡ 3. Especificaciones Eléctricas, Alimentación y Entorno (Específico por Asignatura)
+
+### 🔌 Parámetros de Alimentación y Consumo (Común a ambas materias)
+* **Tensión de operación del sistema:** 3.3V
+* **Método de alimentación:**  Fuente de alimentación externa
+* **Consumo estimado o medido:** * En modo activo, con todos sus modulos operativos 100mA, debido a que el unico componente activo es la lpc
+* En modo pasivo(sin el generador de funciones) el consumo baja a los 67mA
+
+
+### 📌 [OPCIÓN B: Solo para alumnos de Electrónica Digital III (Cortex-M / ARM)]
+* **IDE y SDK:** MCUXpresso IDE v11.8 con LPCOpen v2.10
+* **Microcontrolador Principal:** NXP LPC1769 
+* **Bibliotecas de Terceros y Versiones:** --.
+* **Periféricos Avanzados Utilizados:** GPDMA, TIMER, ADC, DAC, UART, GPIO, NVIC ...
+* **Estrategia de Concurrencia:** Expliquen la arquitectura elegida: [Ej: Bare-metal con máquina de estados cooperativa / RTOS (FreeRTOS) detallando las tareas creadas y sus prioridades].
 
 ---
 
-### 🌊 3. DAC (Convertidor Digital a Analógico)
-- **Utilizado exclusivamente para el modo de Calibración.**
-- **Función:** Genera señales de referencia para verificar el funcionamiento del equipo (bucle cerrado).
-- **Implementación:**  
-    - Conmutación mediante **interruptores físicos**.
-    - Calibración automatizada y supervisada con DMA.
+## 🔄 4. Proceso de Integración y Desarrollo (Común)
+Describan cronológicamente cómo fueron sumando y testeando las diferentes partes del proyecto (enfoque modular de ingeniería).
+
+* **Etapa 1 (Pruebas UART):** El primer paso fue implementar una UART funcional .
+* **Etapa 2 (Plotter):** Desarrollo del plotter en python.
+* **Etapa 3 (Adquisición):** Configuración y pruebas de ADC , vía UART.
+* **Etapa 4 (Filtrados):** Agreagmos un filtro Anti-Alias(Hardware) y uno de mediana(Software) ..
+* **Etapa 5(Generación de señales)** Implementación del DA.
+* **Etapa 6(Calibración y Ajuste)** Se ajustaron tiempos de adquisición y comunicación.
 
 ---
 
-### 💻 4. Visualización de Datos y UART (Interfaz en PC)
-- Para ofrecer claridad de lectura, los datos recolectados se envían vía **puerto serie** hacia una PC.
-- **Script Python 🐍:**  
-    - Recibe y grafica los datos en tiempo real.
-    - Permite una visualización flexible y portátil.
+## 📊 5. Ensayos, Pruebas y Resultados (Común)
+Demuestren con datos empíricos que el sistema funciona correctamente. **Es obligatorio incluir registro visual**.
+
+* **Pruebas Funcionales Realizadas:** Detallen los ensayos (Ej: "Se inyectó una señal controlada para medir la precisión del ADC...").
+* **Evidencia Fotográfica y Gráficos:** * *Capturas de instrumental:* [Insertar capturas de Osciloscopio, Analizador Lógico o Terminal Serie]
+  * *Foto del Prototipo Real:* [Insertar foto del hardware final cableado/armado en funcionamiento]
 
 ---
 
-## 🚀 Proyecto desarrollado para la cátedra de Electrónica Digital 3
+## 📂 6. Estructura del Repositorio (Común)
+El repositorio debe mantener obligatoriamente la siguiente estructura limpia (¡Recuerden configurar correctamente el `.gitignore` para no subir carpetas temporales como `Debug/`, `Release/` o archivos `.p1` / `.d`!).
+
+```text
+├── firmware/          # Código fuente del proyecto (MPLABX / MCUXpresso / STM32Cube)
+│   ├── src/           # Archivos de código (.c)
+│   └── inc/           # Archivos de cabecera (.h)
+├── hardware/          # Archivos de diseño (KiCad/Altium), esquemáticos en PDF/Imagen y BOM
+├── docs/              # Datasheets clave, imágenes del README, notas de aplicación
+└── README.md          # Este archivo de presentación

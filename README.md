@@ -44,8 +44,9 @@ Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito pr
 
 ### 🔌 Hardware & Interconexión
 * **Diagrama de Bloques:** [Insertar imagen o link al diagrama de bloques del hardware]
-* **Esquemático del Circuito:** *[Inserte aquí la captura de imagen/render del esquemático completo desarrollado en KiCad/Altium]*
-  `![Esquemático Completo](hardware/esquematico.png)`
+* **Esquemático del Circuito:** 
+  <img width="1436" height="833" alt="image" src="https://github.com/user-attachments/assets/d00f7812-289d-4fc9-b759-fd9c6c0528b7" />
+
 * **Descripción del Circuito y Consideraciones de Diseño:** Breve explicación de las etapas (ej: acoplamiento de señales, protecciones inductivas, filtrado, etc.).
 
 ### 💻 Arquitectura de Software (Firmware)

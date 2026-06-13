@@ -1,4 +1,4 @@
-# [Osciloscopio Digital]
+# Osciloscopio Digital
 > **Asignatura:** Electrónica Digital [III] - Universidad Nacional de Córdoba
 > **Integrantes:** >
 >  - **Viberti, Benjamín**

@@ -50,8 +50,7 @@ Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito pr
 * **Descripción del Circuito y Consideraciones de Diseño:** Breve explicación de las etapas (ej: acoplamiento de señales, protecciones inductivas, filtrado, etc.).
 
 ### 💻 Arquitectura de Software (Firmware)
-* **Diagrama de Flujo o Máquina de Estados:** *[Inserte aquí la imagen del diagrama que explique el lazo principal o el comportamiento del sistema]*
-  `![Diagrama de Flujo / Máquina de Estados](docs/diagrama_software.png)`
+* **Diagrama de Flujo o Máquina de Estados:** <img width="1436" height="833" alt="image1" src="Diagrama_Code.pdf" />
 
 ---
 

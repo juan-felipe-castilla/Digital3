@@ -1,6 +1,7 @@
 # Osciloscopio Digital
 > **Asignatura:** Electrónica Digital III - Universidad Nacional de Córdoba
-> **Integrantes:** >
+> 
+> **Integrantes:** 
 >  - **Viberti, Benjamín**
 >  - **Castilla, Felipe**
 >  - **Dalmazzo, Agustín**

@@ -49,9 +49,11 @@ Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito pr
 * **Esquemático del Circuito:** 
   <img width="1436" height="833" alt="image" src="https://github.com/user-attachments/assets/d00f7812-289d-4fc9-b759-fd9c6c0528b7" />
 
-* **Descripción del Circuito y Consideraciones de Diseño:** En la entrada posee 2 atenuadores intercambiables de 6DB y 20DB, junto con
- un filtro pasa-bajos que cumple la funcion de filtro anti Aliasing.
+* **Descripción del Circuito y Consideraciones de Diseño:** En la entrada se encuentra un filtro pasa-bajos de 5kHz que cumple la funcion de filtro anti Aliasing, siguiente a este se puede encontrar un DIP Switch que nos permitira seleccionar entre 2 Atenuadores de -6dB y -20dB o una entrada sin atenuacion. Siguiente a los Atenuadores se encuentra la entrada al ADC y al pin de Capture simultaneamente.
+  
 * Los botones de interrupcion poseen filtros anti rebote fisicos.
+  
+* Cada LED cuenta con resistencias limitadoras, se recomienda el uso de Leds rojos.
 
 ### 💻 Arquitectura de Software
 * **Diagrama de Flujo:** <img width="1436" height="833" alt="Diagrama_Codigo" src="Diagrama_Code.pdf" />

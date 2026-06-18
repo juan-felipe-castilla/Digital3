@@ -45,7 +45,8 @@ Cómo escalar el proyecto:
 ## 📐 2. Arquitectura del Sistema: Hardware y Software
 
 ### 🔌 Hardware & Interconexión
-* **Diagrama de Bloques:** <img width="1436" height="833" alt="Diagrama_Circuito" src="Diagrama_Hardware.pdf" />
+* **Diagrama de Bloques:**<img width="1436" height="833" alt="Diagrama_Circuito" src="https://github.com/user-attachments/assets/7d1f7b27-230a-4ba6-854b-cb9404ccabbf" />
+
 * **Esquemático del Circuito:** 
   <img width="1436" height="833" alt="image" src="https://github.com/user-attachments/assets/d00f7812-289d-4fc9-b759-fd9c6c0528b7" />
 

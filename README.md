@@ -159,9 +159,13 @@ Mensaje en pantalla.
 
 ## 📂 6. Estructura del Repositorio
 ```text
-├── firmware/          # Código fuente del proyecto (MPLABX / MCUXpresso / STM32Cube)
-│   ├── src/           # Archivos de código (.c)
-│   └── inc/           # Archivos de cabecera (.h)
-├── hardware/          # Archivos de diseño (KiCad/Altium), esquemáticos en PDF/Imagen y BOM
-├── docs/              # Datasheets clave, imágenes del README, notas de aplicación
-└── README.md          # Este archivo de presentación
+├── codigo/                         # Código fuente del firmware
+│   ├── CMSISv2p00_LPC17xx/         # Librerías base del sistema y soporte CMSIS para el LPC17xx
+│   └── el-jugo/                    # Proyecto principal de desarrollo en el IDE
+│       └── src/                    # Archivos fuente del firmware
+│           ├── codigos/            # Implementación de drivers y control de periféricos (.c)
+│           ├── extras/             # Archivos de arranque y configuración del sistema
+│           └── headers/            # Archivos de cabecera y definiciones (.h)
+├── python-screen/                  # Interfaz gráfica de usuario (GUI) desarrollada en Python
+├── extras/                         # Documentación adicional y archivos complementarios del proyecto
+└── README.md                       # Archivo de presentación del repositorio

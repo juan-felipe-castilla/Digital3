@@ -159,13 +159,18 @@ Mensaje en pantalla.
 
 ## 📂 6. Estructura del Repositorio
 ```text
-├── codigo/                         # Código fuente del firmware
-│   ├── CMSISv2p00_LPC17xx/         # Librerías base del sistema y soporte CMSIS para el LPC17xx
-│   └── el-jugo/                    # Proyecto principal de desarrollo en el IDE
-│       └── src/                    # Archivos fuente del firmware
-│           ├── codigos/            # Implementación de drivers y control de periféricos (.c)
-│           ├── extras/             # Archivos de arranque y configuración del sistema
-│           └── headers/            # Archivos de cabecera y definiciones (.h)
-├── python-screen/                  # Interfaz gráfica de usuario (GUI) desarrollada en Python
-├── extras/                         # Documentación adicional y archivos complementarios del proyecto
+├── Osciloscopio-Digital/           # Carpeta principal del proyecto del osciloscopio
+│   ├── codigo/                     # Código fuente del firmware
+│   │   ├── CMSISv2p00_LPC17xx/     # Librerías base del sistema y soporte CMSIS para LPC17xx
+│   │   └── el-jugo/                # Proyecto principal de desarrollo en el IDE
+│   │       └── src/                # Archivos fuente del firmware
+│   │           ├── codigos/        # Implementación de drivers y control de periféricos (.c)
+│   │           ├── extras/         # Archivos de arranque y configuración del sistema
+│   │           └── headers/        # Archivos de cabecera y definiciones (.h)
+│   └── python-screen/              # Interfaz gráfica de usuario (GUI) desarrollada en Python
+├── extras/                         # Trabajos hechos a lo largo de la cursada
+├── Diagrama_Code.pdf               # Diagrama de flujo / bloques del firmware
+├── Diagrama_Hardware.pdf           # Diagrama de bloques del diseño electrónico
+├── Esquematico Osc. ED3.pdf        # Plano esquemático del circuito en formato PDF
+├── Osciloscopio ED3.kicad_sch      # Archivo de esquema electrónico ejecutable en KiCad
 └── README.md                       # Archivo de presentación del repositorio

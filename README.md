@@ -105,6 +105,8 @@ Prueba funcional: A continuación se presentan imagenes de las siguientes prueba
 
 
 
+
+
 **Prueba 1:** Inyectamos con el generador de funciones una señal cuya forma y frecuencia varía, cambiando lo que se muestra en el osciloscopio digital (acorde a la señal inyectada). Son 3 formas de onda: sinusoidal, cuadrada y triangular.
 
 <img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/5ae56e9a-f61e-4db1-8f7b-cdce538e0aa9" />
@@ -118,6 +120,8 @@ Prueba funcional: A continuación se presentan imagenes de las siguientes prueba
 En la proxima imagen se evidencia como responde al cambio de frecuencia (cambia el ancho de banda de la señal).
 
 <img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/d963a5fb-0068-4a80-bcb7-c691cccc682b" />
+
+
 
 
 
@@ -139,15 +143,17 @@ Por último, imagenes de las señales generadas (triangular, sinusoidal y cuadra
 
 
 
+
+
 **Prueba 3:** Captura de la freuencia de la señal inyectada por el generador mediante CAPTURE. Se muestra la frecuencia en pantalla tras la pulsación de EINT2.
 
 880Hz de señal inyectada.
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/eda63a84-79fc-468d-9bf6-457f5d6a1be8" />
+<img width="960" height="500" alt="image" src="https://github.com/user-attachments/assets/eda63a84-79fc-468d-9bf6-457f5d6a1be8" />
 
 Mensaje en pantalla.
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/58e9bd44-5c59-4bbb-9460-bcf19f197385" />
+<img width="960" height="500" alt="image" src="https://github.com/user-attachments/assets/58e9bd44-5c59-4bbb-9460-bcf19f197385" />
 
 ---
 

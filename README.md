@@ -107,35 +107,35 @@ Prueba funcional: A continuación se presentan imagenes de las siguientes prueba
 
 **Prueba 1:** Inyectamos con el generador de funciones una señal cuya forma y frecuencia varía, cambiando lo que se muestra en el osciloscopio digital (acorde a la señal inyectada). Son 3 formas de onda: sinusoidal, cuadrada y triangular.
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/5ae56e9a-f61e-4db1-8f7b-cdce538e0aa9" />
+<img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/5ae56e9a-f61e-4db1-8f7b-cdce538e0aa9" />
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/08590ed2-883f-4e69-adc7-9ca325e6bdb6" />
+<img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/08590ed2-883f-4e69-adc7-9ca325e6bdb6" />
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/678543ce-7c64-4e0f-940d-0f0b7952f5d2" />
+<img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/678543ce-7c64-4e0f-940d-0f0b7952f5d2" />
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/5e8fe741-0c95-4ad2-988c-9239b39bfba7" />
+<img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/5e8fe741-0c95-4ad2-988c-9239b39bfba7" />
 
 En la proxima imagen se evidencia como responde al cambio de frecuencia (cambia el ancho de banda de la señal).
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/d963a5fb-0068-4a80-bcb7-c691cccc682b" />
+<img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/d963a5fb-0068-4a80-bcb7-c691cccc682b" />
 
 
 
 **Prueba 2:** DAC y el generador de señales para calibrar el osciloscopio. Se activa DAC con EINT0 y encendemos un LED indicador (LED VERDE).
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/6d58fafd-35fa-412b-9f0b-658c31f80a74" />
+<img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/6d58fafd-35fa-412b-9f0b-658c31f80a74" />
 
 A medida que se presiona EINT1, se encienden determinados LEDS ROJOS a modo de indicador de que señal se está generando.
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/120c7326-386d-4d1b-94c5-46662db00f6b" />
+<img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/120c7326-386d-4d1b-94c5-46662db00f6b" />
 
 Por último, imagenes de las señales generadas (triangular, sinusoidal y cuadrada).
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/4b5c6fab-c168-4321-b034-fd52aab20554" />
+<img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/4b5c6fab-c168-4321-b034-fd52aab20554" />
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/b24529ac-369a-4710-8b2d-edef43cbcbe5" />
+<img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/b24529ac-369a-4710-8b2d-edef43cbcbe5" />
 
-<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/6618ef6f-3fd6-468a-8f4f-80989e583ba3" />
+<img width="960" height="700" alt="image" src="https://github.com/user-attachments/assets/6618ef6f-3fd6-468a-8f4f-80989e583ba3" />
 
 
 

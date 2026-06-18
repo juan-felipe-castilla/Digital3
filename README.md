@@ -56,8 +56,7 @@ Cómo escalar el proyecto:
 * Cada LED cuenta con resistencias limitadoras, se recomienda el uso de Leds rojos.
 
 ### 💻 Arquitectura de Software
-* **Diagrama de Flujo:** <img width="1436" height="833" alt="Diagrama_Codigo" src="Diagrama_Code.pdf" />
-
+* **Diagrama de Flujo:** <img width="2000" height="896" alt="Diagrama_Codigo" src="https://github.com/user-attachments/assets/ba64d2b1-05e1-4d34-a258-d700e2ffb1c2" />
 ---
 
 ## ⚡ 3. Especificaciones Eléctricas, Alimentación y Entorno

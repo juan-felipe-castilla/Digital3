@@ -5,15 +5,15 @@
  *      Author: Usuario
  */
 
-#ifndef HEADERS_O_TIM0CAP_H_
-#define HEADERS_O_TIM0CAP_H_
+#ifndef HEADERS_O_TIM2CAP_H_
+#define HEADERS_O_TIM2CAP_H_
 
 
-void confTIM0(void);
+void confTIM2(void);
 void confCAP(void);
 void TIMER0_IRQHandler(void);
 
 
 
 
-#endif /* HEADERS_O_TIM0CAP_H_ */
+#endif /* HEADERS_O_TIM2CAP_H_ */

@@ -1,3 +1,4 @@
+
 #ifdef __USE_CMSIS
 #include "LPC17xx.h"
 #endif
@@ -39,26 +40,25 @@
 #include "headers/o-uart.h"
 #include "headers/o-dac.h"
 #include "headers/o-exti.h"
-#include "headers/o-tim0CAP.h"
+#include "headers/o-tim2CAP.h"
 #include "headers/variables.h"
 
 
 int main(void) {
     SystemInit();
 
+    conf_LED();
+    generate_triangle_in_memory();
+    GPDMA_Init();
     conf_EXTI();
     conf_DAC();
     UART0_Init();
     ADC0_Init();
 
-    generate_triangle_in_memory();
-    generate_square_in_memory();
-    generate_sine_in_memory();
 
     dac_dma();
 
     // Inicializa el controlador GPDMA y habilita su interrupción en el micro
-    GPDMA_Init();
     NVIC_EnableIRQ(DMA_IRQn);
 
     // Habilita el ADC en modo ráfaga continua
@@ -68,8 +68,9 @@ int main(void) {
     // Dispara la primera captura del DMA
     capture_adc_dma_start();
 
-    confTIM0();
+    confTIM2();
     confCAP();
+    TIM_Enable(LPC_TIM2);
 
     while(1) {
             uint8_t buffer_a_procesar_local = 0;
@@ -100,13 +101,16 @@ int main(void) {
 
                         // 1. Calculamos la frecuencia
                         if (periodo_ticks > 0) {
-                            frecuencia_hz = 100000 / periodo_ticks;
+                            frecuencia_hz =100000 / periodo_ticks;
                         } else {
                             frecuencia_hz = 0;
                         }
 
                         // 2. Imprimimos en la terminal (printf usa la UART por defecto si el retarget está configurado)
                         printf("La frecuencia es: %lu Hz\n\r", frecuencia_hz);
+                        t1 = 0;
+                        t2 = 0;
+                        TIM_ResetCounter(LPC_TIM2);
 
                         // 3. Bajamos la bandera para que NO se vuelva a imprimir
                         // hasta que el usuario presione EINT2 otra vez

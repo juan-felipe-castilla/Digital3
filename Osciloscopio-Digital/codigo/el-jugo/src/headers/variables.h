@@ -25,7 +25,7 @@
 
 // Buffers globales para procesamiento (RAM Principal)
 extern uint8_t filtered_buffer[FILTERED_BUFFER_SIZE];
-extern uint8_t triangle_buffer[SAMPLES_PER_CYCLE];
+extern uint16_t signal_buffer[SAMPLES_PER_CYCLE];
 
 // Doble buffer para el ADC (Declarados extern, el atributo __BSS va en el .c)
 extern uint32_t adc_buffer_A[ADC_BUFFER_SIZE];
@@ -35,18 +35,15 @@ extern uint32_t adc_buffer_B[ADC_BUFFER_SIZE];
 extern volatile uint8_t active_dma_buffer;
 extern volatile uint8_t buffer_ready;
 
-extern uint16_t sine_buffer[SAMPLES_PER_CYCLE];
-extern uint16_t quad_buffer[SAMPLES_PER_CYCLE];
-
 //VARIABLES PAAR DAC
 extern volatile uint8_t sistema_dac_activo;
-extern volatile uint8_t canal_dma_actual;  // 1: Triángulo, 2: Seno, 3: Cuadrada
+extern volatile uint8_t current_wave;  // 1: Triángulo, 2: Seno, 3: Cuadrada
 
 //VARIABLES TMR0CAP
 extern volatile uint8_t estado_captura;
-extern volatile uint32_t t1;
-extern volatile uint32_t t2;
-extern volatile uint32_t periodo_ticks;
+extern volatile int t1;
+extern volatile int t2;
+extern volatile int periodo_ticks;
 extern volatile uint8_t nueva_medicion_lista;
 extern uint32_t frecuencia_hz;
 #endif // VARIABLES_H

@@ -42,58 +42,104 @@
 void conf_DAC(){ //OK
 	static DAC_CONVERTER_CFG_T dacCfg;
 	DAC_Init();   			//Inicializamos el DAC y su pin
-	DAC_SetBias(DAC_700uA); //Se banca hasta 400 KHz
+	DAC_SetBias(DAC_700uA); //Se banca hasta 1000 KHz
 	dacCfg.dmaCounter = ENABLE;
 	dacCfg.dmaRequest = ENABLE;
 	dacCfg.doubleBuffer = DISABLE;
 	DAC_ConfigDAConverterControl(&dacCfg);
-	DAC_SetDMATimeOut(49); //El periodo de las senales genradas es de 512 muestras y su frecuencia esperada es de 1Khz,por lo tanto
-						   //1ms/512 = 1954nS, luego 1954nS/40nS = 49
+	DAC_SetDMATimeOut(300);
+
 	DAC_UpdateValue(0);    //Limpiamos lo que este en el DAC
 }
 
-void generate_square_in_memory(void) {//PUEDE ESTAR MAL
+void generate_triangle_in_memory(void) {
     uint32_t i;
+    uint16_t valor_amplitud;
 
-    // Mitad del ciclo en ALTO. Se corre el valor 6 posiciones.
-    for (i = 0; i < SAMPLES_PER_CYCLE / 2; i++) {
-        quad_buffer[i] = (uint16_t)(DAC_MAX_VALUE << 6);
+    // Rampa de subida: 255 muestras (índices del 0 al 254)
+    for(i = 0; i < 255; i++){
+        valor_amplitud = i * 4; // Escala de 0 hasta 1016
+        signal_buffer[i] = (valor_amplitud << 6); // Corrimiento vital para el DACR
     }
 
-    // Mitad del ciclo en BAJO. Se corre el valor 6 posiciones.
-    for (i = SAMPLES_PER_CYCLE / 2; i < SAMPLES_PER_CYCLE; i++) {
-        quad_buffer[i] = (uint16_t)(DAC_MIN_VALUE << 6);
+    // Rampa de bajada: 255 muestras (índices del 255 al 509)
+    for(i = 255; i < 510; i++){
+        valor_amplitud = (510 - i) * 4; // Escala de 1020 bajando hasta 4
+        signal_buffer[i] = (valor_amplitud << 6);
     }
 }
 
-void generate_triangle_in_memory(void) {//PUEDE ESTAR MAL
+void generate_square_in_memory(void) {
     uint32_t i;
 
-    // Se cambia el cast de uint8_t a uint16_t para que el corrimiento de 6 bits
-    // no desborde la variable y se pierda la información.
-    for (i = 0; i < 256; i++) {
-        triangle_buffer[i] = ((uint16_t)i) << 6;
+    // Primer semiciclo: ALTO (1023 corrido 6 posiciones)
+    for (i = 0; i < 255; i++) {
+    	signal_buffer[i] = (1023 << 6);
     }
-    for (i = 256; i < SAMPLES_PER_CYCLE; i++) {
-        triangle_buffer[i] = ((uint16_t)(510 - i)) << 6;
+
+    // Segundo semiciclo: BAJO (0 corrido 6 posiciones)
+    for (i = 255; i < 510; i++) {
+    	signal_buffer[i] = (0 << 6);
     }
 }
 
-void generate_sine_in_memory(void) { //PUEDE ESTAR MAL
+void generate_sine_in_memory(void) {
     uint32_t i;
+    float angle;
+    uint16_t valor_amplitud;
 
-    // El centro de la señal (offset) y la amplitud máxima para no saturar
-    float amplitude = DAC_MAX_VALUE / 2.0f;
-    float offset = DAC_MAX_VALUE / 2.0f;
+    for (i = 0; i < 510; i++) {
+        // Calculamos la fracción del círculo (0 a 2*PI)
+        angle = (2.0f * M_PI * i) / 510.0f;
 
-    for (i = 0; i < SAMPLES_PER_CYCLE; i++) {
-        // Calcular el ángulo en radianes para cada muestra (0 a 2*PI)
-        float angle = (2.0f * M_PI * i) / SAMPLES_PER_CYCLE;
+        // Escalamos de [-1.0 a 1.0] hacia [0 a 1023]
+        valor_amplitud = (uint16_t)((sinf(angle) * 511.5f) + 511.5f);
 
-        // Generar el valor crudo de la seno, aplicar amplitud y offset
-        uint16_t raw_value = (uint16_t)(amplitude * sinf(angle) + offset);
+        // Clip de seguridad: Evita que un error de redondeo del float desborde el DAC
+        if (valor_amplitud > 1023) {
+            valor_amplitud = 1023;
+        }
 
-        // Correr 6 posiciones y guardar en el buffer
-        sine_buffer[i] = raw_value << 6;
+        // Guardamos con el corrimiento hacia el registro DACR
+        signal_buffer[i] = (valor_amplitud << 6);
     }
 }
+
+void conf_LED(){
+	//0.21, 0.22, 0.27 y 0.28
+	PINSEL_CFG_T pin21;
+	pin21.port = PORT_0;
+	pin21.pin = PIN_21;
+	pin21.func = PINSEL_FUNC_00;
+	pin21.mode = PINSEL_TRISTATE;
+	pin21.openDrain = DISABLE;
+	PINSEL_ConfigPin(&pin21);
+
+	PINSEL_CFG_T pin22;
+	pin22.port = PORT_0;
+	pin22.pin = PIN_22;
+	pin22.func = PINSEL_FUNC_00;
+	pin22.mode = PINSEL_TRISTATE;
+	pin22.openDrain = DISABLE;
+	PINSEL_ConfigPin(&pin22);
+
+	PINSEL_CFG_T pin27;
+	pin27.port = PORT_0;
+	pin27.pin = PIN_27;
+	pin27.func = PINSEL_FUNC_00;
+	pin27.mode = PINSEL_TRISTATE;
+	pin27.openDrain = DISABLE;
+	PINSEL_ConfigPin(&pin27);
+
+	PINSEL_CFG_T pin28;
+	pin28.port = PORT_0;
+	pin28.pin = PIN_28;
+	pin28.func = PINSEL_FUNC_00;
+	pin28.mode = PINSEL_TRISTATE;
+	pin28.openDrain = DISABLE;
+	PINSEL_ConfigPin(&pin28);
+
+	GPIO_SetDir(PORT_0, 408944640,GPIO_OUTPUT);
+	GPIO_ClearPins(PORT_0, 408944640);
+}
+

@@ -162,7 +162,7 @@ Mensaje en pantalla.
 ├── Osciloscopio-Digital/           # Carpeta principal del proyecto del osciloscopio
 │   ├── codigo/                     # Código fuente del firmware
 │   │   ├── CMSISv2p00_LPC17xx/     # Librerías base del sistema y soporte CMSIS para LPC17xx
-│   │   └── el-jugo/                # Proyecto principal de desarrollo en el IDE
+│   │   └── Osc_Project/                # Proyecto principal de desarrollo en el IDE
 │   │       └── src/                # Archivos fuente del firmware
 │   │           ├── codigos/        # Implementación de drivers y control de periféricos (.c)
 │   │           ├── extras/         # Archivos de arranque y configuración del sistema

@@ -18,7 +18,7 @@ El objetivo principal es la **adquisición de señales analógicas**, su procesa
 
 
 ### 🎯 Alcances del Proyecto 
-Delimiten claramente los objetivos alcanzados para la entrega final:
+
 * **El sistema SÍ es capaz de:**
 * 
 * Muestrear y procesar señales de frecuencias medias, bajas.
@@ -34,7 +34,7 @@ Delimiten claramente los objetivos alcanzados para la entrega final:
 * Un trigger ajustable
 
 ### ⏩ Posibles Etapas Siguientes
-Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito profesional:
+Cómo escalar el proyecto:
 * Utilizar otro protocolo de comunicación serie, más eficiente
 * Utilizar un módulo de adc más exacto, externo
 * Agregar una punta compensada
@@ -74,12 +74,11 @@ Planteen cómo escalaría este desarrollo en una versión 2.0 o en un ámbito pr
 * **Microcontrolador Principal:** NXP LPC1769 
 * **Bibliotecas de Terceros y Versiones:** --.
 * **Periféricos Avanzados Utilizados:** GPDMA, TIMER, ADC, DAC, UART, GPIO, NVIC ...
-* **Estrategia de Concurrencia:** ?
+* **Estrategia de Concurrencia:** Nuestra estrategia es descargar a la CPU delegando todo el trabajo al hardware (DMA). El main se queda libre esperando comandos de Python por UART, mientras que de fondo los dos canales de DMA hacen todo en paralelo: el Canal 0 (RAM al DAC) envia datos para generar las señales (si está previamente activado el modo), y el Canal 1 (del ADC a la RAM) toma las muestras del generador de funciones. Así, la placa procesa, genera y captura todo al mismo tiempo sin colgarse nunca.
 
 ---
 
 ## 🔄 4. Proceso de Integración y Desarrollo
-Describan cronológicamente cómo fueron sumando y testeando las diferentes partes del proyecto (enfoque modular de ingeniería).
 
 * **Etapa 1 (Pruebas UART):** El primer paso fue implementar una UART funcional .
 * **Etapa 2 (Plotter):** Desarrollo del plotter en python.
@@ -91,7 +90,9 @@ Describan cronológicamente cómo fueron sumando y testeando las diferentes part
 ---
 
 ## 📊 5. Ensayos, Pruebas y Resultados
-Demuestren con datos empíricos que el sistema funciona correctamente. **Es obligatorio incluir registro visual**.
+Se adjunta evidencia del proyecto funcionando, junto con una fotografía del hardware ensamblado:
+<img width="960" height="1280" alt="placa" src="https://github.com/user-attachments/assets/2cce1d20-7199-4e7f-b99a-0e402adb9e8e" />
+
 
 * **Pruebas Funcionales Realizadas:** Detallen los ensayos (Ej: "Se inyectó una señal controlada para medir la precisión del ADC...").
 * **Evidencia Fotográfica y Gráficos:** * *Capturas de instrumental:* [Insertar capturas de Osciloscopio, Analizador Lógico o Terminal Serie]
